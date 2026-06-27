@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+
+{% block title %}Admin Dashboard | Revive & Thrive Tech{% endblock %}
+
+{% block content %}
+  <section class="section">
+    <h1>Admin dashboard</h1>
+    <div class="stats">
+      <div class="stat-card">
+        <h3>Total tickets</h3>
+        <p>{{ total_tickets }}</p>
+      </div>
+      <div class="stat-card">
+        <h3>Open repairs</h3>
+        <p>{{ open_tickets }}</p>
+      </div>
+      <div class="stat-card">
+        <h3>Completed</h3>
+        <p>{{ completed_tickets }}</p>
+      </div>
+      <div class="stat-card">
+        <h3>Revenue</h3>
+        <p>${{ '%.2f' | format(revenue) }}</p>
+      </div>
+    </div>
+
+    <div class="section">
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Phone</th>
+            <th>Device</th>
+            <th>Service</th>
+            <th>Status</th>
+            <th>Cost</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for booking in bookings %}
+            <tr>
+              <td>{{ booking.id }}</td>
+              <td>{{ booking.customer_name }}</td>
+              <td>{{ booking.phone_number }}</td>
+              <td>{{ booking.device_model }}</td>
+              <td>{{ booking.service_needed }}</td>
+              <td><span class="tag tag-{{ booking.status|lower().replace(' ', '') }}">{{ booking.status }}</span></td>
+              <td>${{ '%.2f' | format(booking.repair_cost or 0) }}</td>
+              <td><a class="button" href="/ticket/{{ booking.id }}">Manage</a></td>
+            </tr>
+          {% else %}
+            <tr>
+              <td colspan="8">No booking requests yet.</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </section>
+{% endblock %}

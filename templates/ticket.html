@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Manage Ticket #{{ booking.id }} | Revive & Thrive Tech</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+</head>
+<body>
+<header>
+  <div class="container">
+    <nav>
+      <div class="brand">Revive <span>&</span> Thrive Tech</div>
+      <div class="nav-links">
+        <a href="/">Home</a>
+        <a href="/services">Services</a>
+        <a href="/book">Book Repair</a>
+        <a href="/status">Track Repair</a>
+      </div>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <section class="section container">
+    <h1>Repair ticket #{{ booking.id }}</h1>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, message in messages %}
+          <div class="alert {{ category }}">{{ message }}</div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+
+    <div class="card">
+      <p><strong>Name:</strong> {{ booking.customer_name }}</p>
+      <p><strong>Phone:</strong> {{ booking.phone_number }}</p>
+      <p><strong>Device:</strong> {{ booking.device_model }}</p>
+      <p><strong>Service:</strong> {{ booking.service_needed }}</p>
+      <p><strong>Status:</strong> {{ booking.status }}</p>
+      <p><strong>Repair Cost:</strong> ${{ '%.2f' | format(booking.repair_cost or 0) }}</p>
+      <p><strong>Notes:</strong> {{ booking.notes or 'No notes yet.' }}</p>
+    </div>
+
+    <form method="POST" class="form">
+      <div class="field-group">
+        <label for="status">Update Status</label>
+        <select id="status" name="status" required>
+          {% for option in status_options %}
+            <option value="{{ option }}" {% if booking.status == option %}selected{% endif %}>{{ option }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="field-group">
+        <label for="repair_cost">Repair Cost</label>
+        <input id="repair_cost" type="number" step="0.01" name="repair_cost" value="{{ booking.repair_cost or 0 }}" placeholder="Repair Cost" />
+      </div>
+      <div class="field-group">
+        <label for="notes">Repair Notes</label>
+        <textarea id="notes" name="notes" placeholder="Repair Notes">{{ booking.notes or '' }}</textarea>
+      </div>
+      <button type="submit" class="button">Update Ticket</button>
+    </form>
+
+    <p><a href="/admin">Back to admin</a></p>
+  </section>
+</main>
+
+<footer>
+  <div class="container">© 2026 Revive & Thrive Tech</div>
+</footer>
+</body>
+</html>

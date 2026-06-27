@@ -1,0 +1,103 @@
+from flask import Flask, render_template, request, redirect
+import sqlite3
+from datetime import datetime
+
+app = Flask(__name__)
+
+def init_db():
+    conn = sqlite3.connect("database.db")
+    cursor = conn.cursor()
+
+    cursor.execute("""
+        CREATE TABLE IF NOT EXISTS bookings (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            customer_name TEXT NOT NULL,
+            phone_number TEXT NOT NULL,
+            device_type TEXT NOT NULL,
+            device_model TEXT NOT NULL,
+            service_needed TEXT NOT NULL,
+            issue_description TEXT NOT NULL,
+            preferred_date TEXT NOT NULL,
+            status TEXT DEFAULT 'New Request',
+            created_at TEXT NOT NULL
+        )
+    """)
+
+    conn.commit()
+    conn.close()
+
+@app.route("/")
+def home():
+    return render_template("index.html")
+
+@app.route("/services")
+def services():
+    return render_template("services.html")
+
+@app.route("/book", methods=["GET", "POST"])
+def book():
+    if request.method == "POST":
+        customer_name = request.form["customer_name"]
+        phone_number = request.form["phone_number"]
+        device_type = request.form["device_type"]
+        device_model = request.form["device_model"]
+        service_needed = request.form["service_needed"]
+        issue_description = request.form["issue_description"]
+        preferred_date = request.form["preferred_date"]
+        created_at = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
+        conn = sqlite3.connect("database.db")
+        cursor = conn.cursor()
+
+        cursor.execute("""
+            INSERT INTO bookings (
+                customer_name,
+                phone_number,
+                device_type,
+                device_model,
+                service_needed,
+                issue_description,
+                preferred_date,
+                created_at
+            )
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+        """, (
+            customer_name,
+            phone_number,
+            device_type,
+            device_model,
+            service_needed,
+            issue_description,
+            preferred_date,
+            created_at
+        ))
+
+        conn.commit()
+        conn.close()
+
+        return redirect("/success")
+
+    return render_template("book.html")
+
+@app.route("/success")
+def success():
+    return render_template("success.html")
+
+@app.route("/api/bookings")
+def api_bookings():
+    conn = sqlite3.connect("database.db")
+    conn.row_factory = sqlite3.Row
+    cursor = conn.cursor()
+
+    cursor.execute("SELECT * FROM bookings ORDER BY id DESC")
+    bookings = cursor.fetchall()
+
+    conn.close()
+
+    return {
+        "bookings": [dict(row) for row in bookings]
+    }
+
+if __name__ == "__main__":
+    init_db()
+    app.run(debug=True)

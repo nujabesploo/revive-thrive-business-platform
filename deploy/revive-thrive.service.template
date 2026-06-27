@@ -1,0 +1,13 @@
+[Unit]
+Description=Revive Thrive Flask App
+After=network.target
+
+[Service]
+User=ubuntu
+Group=www-data
+WorkingDirectory=/home/ubuntu/revive-thrive-platform
+Environment="PATH=/home/ubuntu/revive-thrive-platform/venv/bin"
+ExecStart=/home/ubuntu/revive-thrive-platform/venv/bin/gunicorn --workers 3 --bind 127.0.0.1:5000 app:app
+
+[Install]
+WantedBy=multi-user.target

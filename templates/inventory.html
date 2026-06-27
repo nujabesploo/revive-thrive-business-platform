@@ -1,0 +1,110 @@
+{% extends 'base.html' %}
+
+{% block title %}Inventory Management | Revive & Thrive Tech{% endblock %}
+
+{% block content %}
+  <section class="section">
+    <div class="section-header">
+      <h1>Inventory Management</h1>
+      <a href="/inventory/add" class="button button-primary">Add Item</a>
+    </div>
+
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-icon">📦</div>
+        <div class="stat-content">
+          <p class="stat-label">Total Items</p>
+          <p class="stat-value">{{ total_items }}</p>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon">⚠️</div>
+        <div class="stat-content">
+          <p class="stat-label">Low Stock</p>
+          <p class="stat-value">{{ low_stock }}</p>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon">💰</div>
+        <div class="stat-content">
+          <p class="stat-label">Total Value</p>
+          <p class="stat-value">${{ '%.2f' | format(total_value) }}</p>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon">🚫</div>
+        <div class="stat-content">
+          <p class="stat-label">Out of Stock</p>
+          <p class="stat-value">{{ out_of_stock }}</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="filters">
+      <form method="GET" class="filter-form">
+        <input type="text" name="search" placeholder="Search items..." value="{{ search_query }}" />
+        <select name="category">
+          <option value="">All Categories</option>
+          {% for cat in categories %}
+            <option value="{{ cat }}" {% if category_filter == cat %}selected{% endif %}>{{ cat }}</option>
+          {% endfor %}
+        </select>
+        <button type="submit" class="button">Search</button>
+      </form>
+    </div>
+
+    {% if items %}
+      <div class="table-responsive">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Item Name</th>
+              <th>Category</th>
+              <th>Quantity</th>
+              <th>Cost</th>
+              <th>Total Value</th>
+              <th>Supplier</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for item in items %}
+              <tr>
+                <td><strong>{{ item.item_name }}</strong></td>
+                <td>{{ item.category }}</td>
+                <td>
+                  <span class="badge {% if item.quantity <= item.reorder_level %}badge-warning{% elif item.quantity == 0 %}badge-danger{% else %}badge-success{% endif %}">
+                    {{ item.quantity }}
+                  </span>
+                </td>
+                <td>${{ '%.2f' | format(item.cost) }}</td>
+                <td>${{ '%.2f' | format(item.quantity * item.cost) }}</td>
+                <td>{{ item.supplier or '—' }}</td>
+                <td>
+                  {% if item.quantity == 0 %}
+                    <span class="tag tag-danger">Out of Stock</span>
+                  {% elif item.quantity <= item.reorder_level %}
+                    <span class="tag tag-warning">Low Stock</span>
+                  {% else %}
+                    <span class="tag tag-success">In Stock</span>
+                  {% endif %}
+                </td>
+                <td>
+                  <a href="/inventory/edit/{{ item.id }}" class="button button-sm button-secondary">Edit</a>
+                  <form method="POST" action="/inventory/delete/{{ item.id }}" style="display:inline;">
+                    <button type="submit" class="button button-sm button-danger" onclick="return confirm('Delete this item?')">Delete</button>
+                  </form>
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    {% else %}
+      <div class="empty-state">
+        <p>No inventory items yet. <a href="/inventory/add">Add one now</a></p>
+      </div>
+    {% endif %}
+  </section>
+{% endblock %}

@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block title %}Track Repair | Revive & Thrive Tech{% endblock %}
+
+{% block content %}
+  <section class="section">
+    <h1>Track Your Repair</h1>
+    <p>Enter the phone number used when booking your repair.</p>
+
+    <form method="POST" class="form">
+      <div class="field-group">
+        <label for="phone">Phone Number</label>
+        <input id="phone" type="text" name="phone" placeholder="Enter Phone Number" required />
+      </div>
+      <button type="submit" class="button">Check Repair Status</button>
+    </form>
+
+    {% if booking %}
+      <div class="card">
+        <h2>Repair Status</h2>
+        <p><strong>Customer:</strong> {{ booking.customer_name }}</p>
+        <p><strong>Device:</strong> {{ booking.device_model }}</p>
+        <p><strong>Service:</strong> {{ booking.service_needed }}</p>
+        <p><strong>Status:</strong> {{ booking.status }}</p>
+        <p><strong>Notes:</strong> {{ booking.notes or 'No notes yet.' }}</p>
+      </div>
+    {% endif %}
+  </section>
+{% endblock %}

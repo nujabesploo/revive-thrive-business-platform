@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+
+{% block title %}Add Inventory Item | Revive & Thrive Tech{% endblock %}
+
+{% block content %}
+  <section class="section">
+    <h1>Add Inventory Item</h1>
+    <p>Enter details for a new parts inventory item.</p>
+
+    <form method="POST" class="form">
+      <div class="form-row">
+        <div class="field-group">
+          <label for="item_name">Item Name *</label>
+          <input id="item_name" type="text" name="item_name" value="{{ form.get('item_name', '') }}" placeholder="e.g., iPhone 13 Screen" required />
+        </div>
+        <div class="field-group">
+          <label for="category">Category *</label>
+          <select id="category" name="category" required>
+            <option value="">Select Category</option>
+            {% for opt in ["iPhone Screens", "Samsung Screens", "Batteries", "Charging Ports", "Cameras", "Speakers", "Microphones", "Cases", "Screen Protectors"] %}
+              <option value="{{ opt }}" {% if form.get('category') == opt %}selected{% endif %}>{{ opt }}</option>
+            {% endfor %}
+          </select>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="field-group">
+          <label for="quantity">Quantity</label>
+          <input id="quantity" type="number" name="quantity" value="{{ form.get('quantity', 0) }}" placeholder="0" min="0" />
+        </div>
+        <div class="field-group">
+          <label for="cost">Unit Cost ($)</label>
+          <input id="cost" type="number" step="0.01" name="cost" value="{{ form.get('cost', 0) }}" placeholder="0.00" min="0" />
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="field-group">
+          <label for="supplier">Supplier</label>
+          <input id="supplier" type="text" name="supplier" value="{{ form.get('supplier', '') }}" placeholder="Supplier name" />
+        </div>
+        <div class="field-group">
+          <label for="reorder_level">Reorder Level</label>
+          <input id="reorder_level" type="number" name="reorder_level" value="{{ form.get('reorder_level', 5) }}" placeholder="5" min="0" />
+        </div>
+      </div>
+
+      <div class="form-actions">
+        <button type="submit" class="button button-primary">Add Item</button>
+        <a href="/inventory" class="button button-secondary">Cancel</a>
+      </div>
+    </form>
+  </section>
+{% endblock %}

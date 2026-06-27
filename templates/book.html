@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+
+{% block title %}Book Repair | Revive & Thrive Tech{% endblock %}
+
+{% block content %}
+  <section class="section">
+    <h1>Book a repair appointment</h1>
+    <p>Complete the form and our team will confirm your repair details shortly.</p>
+
+    <form method="POST" class="form">
+      <div class="field-group">
+        <label for="customer_name">Full Name</label>
+        <input id="customer_name" type="text" name="customer_name" value="{{ form.get('customer_name', '') }}" placeholder="Full Name" required />
+      </div>
+      <div class="field-group">
+        <label for="phone_number">Phone Number</label>
+        <input id="phone_number" type="text" name="phone_number" value="{{ form.get('phone_number', '') }}" placeholder="Phone Number" required />
+      </div>
+      <div class="field-group">
+        <label for="device_type">Device Type</label>
+        <select id="device_type" name="device_type" required>
+          <option value="">Select Device Type</option>
+          {% for option in ["iPhone", "Samsung", "Android", "Tablet", "Other"] %}
+            <option value="{{ option }}" {% if form.get('device_type') == option %}selected{% endif %}>{{ option }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="field-group">
+        <label for="device_model">Device Model</label>
+        <input id="device_model" type="text" name="device_model" value="{{ form.get('device_model', '') }}" placeholder="Device Model" required />
+      </div>
+      <div class="field-group">
+        <label for="service_needed">Service Needed</label>
+        <select id="service_needed" name="service_needed" required>
+          <option value="">Select Service Needed</option>
+          {% for option in ["Screen Repair", "Battery Replacement", "Charging Port Repair", "Camera Repair", "Speaker/Microphone Repair", "Water Damage Diagnostic", "General Diagnostic"] %}
+            <option value="{{ option }}" {% if form.get('service_needed') == option %}selected{% endif %}>{{ option }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="field-group">
+        <label for="issue_description">Issue Description</label>
+        <textarea id="issue_description" name="issue_description" placeholder="Describe the issue" required>{{ form.get('issue_description', '') }}</textarea>
+      </div>
+      <div class="field-group">
+        <label for="preferred_date">Preferred Appointment Date</label>
+        <input id="preferred_date" type="date" name="preferred_date" value="{{ form.get('preferred_date', '') }}" required />
+      </div>
+      <button type="submit" class="button">Submit Booking Request</button>
+    </form>
+  </section>
+{% endblock %}
