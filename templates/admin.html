@@ -28,6 +28,7 @@
       <table>
         <thead>
           <tr>
+            <th>Ticket</th>
             <th>ID</th>
             <th>Name</th>
             <th>Phone</th>
@@ -41,6 +42,7 @@
         <tbody>
           {% for booking in bookings %}
             <tr>
+              <td>{{ booking.ticket_code or '' }}</td>
               <td>{{ booking.id }}</td>
               <td>{{ booking.customer_name }}</td>
               <td>{{ booking.phone_number }}</td>

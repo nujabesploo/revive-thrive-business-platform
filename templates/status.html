@@ -18,6 +18,7 @@
     {% if booking %}
       <div class="card">
         <h2>Repair Status</h2>
+        <p><strong>Ticket:</strong> {{ booking.ticket_code or booking.id }}</p>
         <p><strong>Customer:</strong> {{ booking.customer_name }}</p>
         <p><strong>Device:</strong> {{ booking.device_model }}</p>
         <p><strong>Service:</strong> {{ booking.service_needed }}</p>

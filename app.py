@@ -2,11 +2,60 @@ import os
 import re
 import sqlite3
 from datetime import datetime, date
+import smtplib
+import requests
+from email.message import EmailMessage
+from dotenv import load_dotenv
 from flask import Flask, render_template, request, redirect, url_for, flash, abort, jsonify
 
 app = Flask(__name__)
+load_dotenv()
+
+# Notification / credentials
+BUSINESS_EMAIL = os.getenv("BUSINESS_EMAIL")
+MAIL_USERNAME = os.getenv("MAIL_USERNAME")
+MAIL_PASSWORD = os.getenv("MAIL_PASSWORD")
+
+TELEGRAM_BOT_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
+TELEGRAM_CHAT_ID = os.getenv("TELEGRAM_CHAT_ID")
+
 app.config["SECRET_KEY"] = os.environ.get("FLASK_SECRET_KEY", "revive-thrive-secret")
 app.config["DATABASE"] = os.path.join(os.path.dirname(__file__), "database.db")
+def send_email(to_email, subject, body):
+    if not MAIL_USERNAME or not MAIL_PASSWORD:
+        print("Email credentials missing.")
+        return
+
+    msg = EmailMessage()
+    msg["From"] = MAIL_USERNAME
+    msg["To"] = to_email
+    msg["Subject"] = subject
+    msg.set_content(body)
+
+    try:
+        with smtplib.SMTP_SSL("smtp.gmail.com", 465) as smtp:
+            smtp.login(MAIL_USERNAME, MAIL_PASSWORD)
+            smtp.send_message(msg)
+        print("Email sent.")
+    except Exception as e:
+        print(f"Email failed: {e}")
+
+
+def send_telegram(message):
+    if not TELEGRAM_BOT_TOKEN or not TELEGRAM_CHAT_ID:
+        print("Telegram credentials missing.")
+        return
+
+    url = f"https://api.telegram.org/bot{TELEGRAM_BOT_TOKEN}/sendMessage"
+    try:
+        requests.post(url, data={
+            "chat_id": TELEGRAM_CHAT_ID,
+            "text": message,
+        })
+        print("Telegram sent.")
+    except Exception as e:
+        print(f"Telegram failed: {e}")
+
 
 STATUS_OPTIONS = [
     "New Request",
@@ -81,6 +130,13 @@ def init_db():
         "TEXT DEFAULT ''",
     )
 
+    add_column_if_missing(
+        cursor,
+        "bookings",
+        "ticket_code",
+        "TEXT DEFAULT ''",
+    )
+
     cursor.execute("SELECT id, phone_number FROM bookings")
     rows = cursor.fetchall()
 
@@ -130,6 +186,7 @@ def book():
             for key in [
                 "customer_name",
                 "phone_number",
+                "email",
                 "device_type",
                 "device_model",
                 "service_needed",
@@ -188,8 +245,84 @@ def book():
             ),
         )
 
+        # capture ticket id before closing connection
+        ticket_id = cursor.lastrowid
+
+        # generate human-friendly ticket code and save it
+        ticket_code = f"RT-{int(ticket_id):04d}"
+        try:
+            cursor.execute(
+            "UPDATE bookings SET ticket_code = ? WHERE id = ?",
+            (ticket_code, ticket_id),
+            )
+        except Exception:
+            pass
+
         conn.commit()
         conn.close()
+
+        # prepare notification messages
+        business_message = f"""
+    🔔 NEW BOOKING
+
+    Ticket: {ticket_code}
+    Customer: {form_data.get("customer_name")}
+    Phone: {form_data.get("phone_number")}
+    Device: {form_data.get("device_type")} {form_data.get("device_model")}
+    Service: {form_data.get("service_needed")}
+    Issue: {form_data.get("issue_description")}
+    Preferred Date: {form_data.get("preferred_date")}
+
+    Admin: https://revivethrivetech.com/admin
+    """
+
+        customer_message = f"""
+    Hi {form_data.get("customer_name")},
+
+    Thank you for booking with Revive & Thrive Tech.
+
+    Your repair request has been received.
+
+    Ticket: {ticket_code}
+    Device: {form_data.get("device_type")} {form_data.get("device_model")}
+    Service: {form_data.get("service_needed")}
+
+    Track your repair: https://revivethrivetech.com/status
+
+    We will contact you shortly to confirm your appointment.
+
+    - Revive & Thrive Tech
+    """
+
+        # Notify business via Telegram and email
+        try:
+            send_telegram(business_message)
+        except Exception as e:
+            print(f"Business telegram notify failed: {e}")
+
+        try:
+            if BUSINESS_EMAIL:
+                send_email(
+                    BUSINESS_EMAIL,
+                    "New Repair Booking - Revive & Thrive Tech",
+                    business_message,
+                )
+        except Exception as e:
+            print(f"Business email notify failed: {e}")
+
+        # Notify customer (email)
+        try:
+            customer_email = form_data.get("email") or request.form.get("email")
+            if customer_email:
+                send_email(
+                    customer_email,
+                    "Your Revive & Thrive Tech Booking Confirmation",
+                    customer_message,
+                )
+        except Exception as e:
+            print(f"Customer email notify failed: {e}")
+
+        # (No SMS here — using email and Telegram notifications)
 
         flash("Repair request submitted successfully. We will contact you soon.", "success")
         return redirect(url_for("success"))
@@ -237,6 +370,31 @@ def admin():
         revenue=revenue,
         status_options=STATUS_OPTIONS,
     )
+
+
+@app.route('/contact', methods=['GET', 'POST'])
+def contact():
+    if request.method == 'POST':
+        name = request.form.get('name', '').strip()
+        email = request.form.get('email', '').strip()
+        message = request.form.get('message', '').strip()
+
+        if not (name and email and message):
+            flash('Please complete all fields before sending your message.', 'error')
+            return render_template('contact.html', form={'name':name, 'email':email, 'message':message})
+
+        body = f"Contact form submission\n\nName: {name}\nEmail: {email}\n\nMessage:\n{message}"
+
+        try:
+            if BUSINESS_EMAIL:
+                send_email(BUSINESS_EMAIL, f'Contact form: {name}', body)
+            flash('Your message has been sent. We will be in touch shortly.', 'success')
+            return redirect(url_for('success'))
+        except Exception as e:
+            print('Contact email failed:', e)
+            flash('Failed to send message. Please try again later.', 'error')
+
+    return render_template('contact.html', form={})
 
 
 @app.route("/ticket/<int:id>", methods=["GET", "POST"])
