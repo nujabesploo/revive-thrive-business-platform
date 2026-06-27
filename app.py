@@ -326,6 +326,7 @@ def api_bookings():
 
     conn.close()
 
+
     return jsonify({"bookings": [dict(row) for row in bookings]})
 
 
@@ -564,9 +565,30 @@ def server_error(error):
     return "<h1>500 - Server Error</h1><p>Something went wrong on the server.</p>", 500
 
 
+def find_available_port(host, preferred_port=5000, max_tries=20):
+    import socket
+
+    if isinstance(preferred_port, str):
+        preferred_port = int(preferred_port)
+
+    for port in range(preferred_port, preferred_port + max_tries):
+        with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sock:
+            sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+            try:
+                sock.bind((host, port))
+                return port
+            except OSError:
+                continue
+
+    return preferred_port
+
+
 if __name__ == "__main__":
     init_db()
     host = os.environ.get("FLASK_RUN_HOST", "0.0.0.0")
-    port = int(os.environ.get("PORT", 5000))
+    configured_port = os.environ.get("PORT", 5000)
+    port = find_available_port(host, configured_port)
     debug_mode = os.environ.get("FLASK_DEBUG", "False").lower() in ("1", "true", "yes")
+    if str(configured_port) != str(port):
+        print(f"Port {configured_port} is in use. Starting on available port {port} instead.")
     app.run(host=host, port=port, debug=debug_mode)
