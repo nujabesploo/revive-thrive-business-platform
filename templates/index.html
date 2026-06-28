@@ -1,85 +1,58 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="Revive & Thrive Tech — Fast, reliable phone and tablet repair in Arlington, TX. Screen repair, battery replacement, water damage diagnostics and more.">
-    <title>Revive & Thrive Tech | Phone Repair Arlington TX</title>
-    <link rel="stylesheet" href="/static/style.css">
-</head>
-<body>
+{% extends 'base.html' %}
 
-<a class="skip-link" href="#main">Skip to content</a>
+{% block title %}Home | Revive & Thrive Tech{% endblock %}
 
-<header class="hero">
-    <nav class="navbar" role="navigation" aria-label="Main navigation">
-        <div class="logo">Revive<span>&</span>Thrive Tech</div>
-        <div class="nav-links">
-            <a href="/">Home</a>
-            <a href="/services">Services</a>
-            <a href="/book">Book Repair</a>
-            <a href="/status">Track Repair</a>
-            <a href="/contact">Contact</a>
-        </div>
-    </nav>
-
-    <div class="hero-content" id="main">
-        <p class="badge">Arlington, TX Phone Repair</p>
-        <h1>Fast, Reliable Phone Repair You Can Trust</h1>
-        <p class="subtitle">iPhone • Samsung • Tablet Repair • Screen Repair • Battery Replacement</p>
-        <div class="hero-buttons">
-            <a href="/book" class="btn primary">Book a Repair</a>
-            <a href="tel:+13475539089" class="btn secondary">Call Now</a>
-        </div>
+{% block content %}
+  <section class="bg-gradient-to-r from-indigo-50 to-white dark:from-gray-800 dark:to-gray-900">
+    <div class="container mx-auto px-4 py-20 text-center">
+      <p class="text-sm text-indigo-600 font-semibold">Arlington, TX • Phone Repair</p>
+      <h1 class="mt-4 text-4xl md:text-5xl font-extrabold text-gray-900 dark:text-white">Fast, Reliable Phone Repair You Can Trust</h1>
+      <p class="mt-3 text-gray-600 dark:text-gray-300">iPhone • Samsung • Tablet Repair • Screen Repair • Battery Replacement</p>
+      <div class="mt-6 flex items-center justify-center gap-4">
+        <a href="/book" class="px-6 py-3 bg-indigo-600 text-white rounded-md hover:bg-indigo-500">Book a Repair</a>
+        <a href="tel:+13475539089" class="px-6 py-3 border border-gray-300 rounded-md text-gray-700 dark:text-gray-200">Call Now</a>
+      </div>
     </div>
-</header>
+  </section>
 
-<section class="features">
-    <div>
-        <h3>Same-Day Service</h3>
-        <p>Quick turnaround for common repairs.</p>
+  <section class="container mx-auto px-4 py-12">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div class="p-6 bg-white dark:bg-gray-800 rounded-lg shadow">
+        <h3 class="text-lg font-semibold">Same-Day Service</h3>
+        <p class="mt-2 text-sm text-gray-600 dark:text-gray-300">Quick turnaround for common repairs.</p>
+      </div>
+      <div class="p-6 bg-white dark:bg-gray-800 rounded-lg shadow">
+        <h3 class="text-lg font-semibold">Real Diagnostics</h3>
+        <p class="mt-2 text-sm text-gray-600 dark:text-gray-300">We inspect your device before repair.</p>
+      </div>
+      <div class="p-6 bg-white dark:bg-gray-800 rounded-lg shadow">
+        <h3 class="text-lg font-semibold">Local Business</h3>
+        <p class="mt-2 text-sm text-gray-600 dark:text-gray-300">Serving Arlington, TX and nearby areas.</p>
+      </div>
     </div>
-    <div>
-        <h3>Real Diagnostics</h3>
-        <p>We inspect your device before repair.</p>
+  </section>
+
+  <section class="container mx-auto px-4 py-8">
+    <h2 class="text-2xl font-bold mb-4">Popular Repairs</h2>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div class="p-6 bg-white dark:bg-gray-800 rounded-lg shadow">
+        <h3 class="text-lg font-semibold">Screen Repair</h3>
+        <p class="mt-2 text-sm text-gray-600 dark:text-gray-300">Cracked screen replacement for iPhone, Samsung, and Android devices.</p>
+        <a class="mt-4 inline-block text-indigo-600" href="/book">Book Now →</a>
+      </div>
+      <div class="p-6 bg-white dark:bg-gray-800 rounded-lg shadow">
+        <h3 class="text-lg font-semibold">Battery Replacement</h3>
+        <p class="mt-2 text-sm text-gray-600 dark:text-gray-300">Restore battery life and performance with a fast replacement.</p>
+        <a class="mt-4 inline-block text-indigo-600" href="/book">Book Now →</a>
+      </div>
+      <div class="p-6 bg-white dark:bg-gray-800 rounded-lg shadow">
+        <h3 class="text-lg font-semibold">Water Damage</h3>
+        <p class="mt-2 text-sm text-gray-600 dark:text-gray-300">Diagnostics and cleaning for liquid-damaged devices.</p>
+        <a class="mt-4 inline-block text-indigo-600" href="/book">Book Now →</a>
+      </div>
     </div>
-    <div>
-        <h3>Local Business</h3>
-        <p>Serving Arlington, TX and nearby areas.</p>
-    </div>
-</section>
+  </section>
 
-<section class="section">
-    <h2>Popular Repairs</h2>
-    <div class="cards">
-        <div class="card">
-            <h3>Screen Repair</h3>
-            <p>Cracked screen replacement for iPhone, Samsung, and Android devices.</p>
-            <a href="/book">Book Now →</a>
-        </div>
-        <div class="card">
-            <h3>Battery Replacement</h3>
-            <p>Restore battery life and performance with a fast replacement.</p>
-            <a href="/book">Book Now →</a>
-        </div>
-        <div class="card">
-            <h3>Water Damage</h3>
-            <p>Diagnostics and cleaning for liquid-damaged devices.</p>
-            <a href="/book">Book Now →</a>
-        </div>
-    </div>
-</section>
+  {% include '_testimonials.html' %}
 
-<section class="cta">
-    <h2>Need your phone fixed today?</h2>
-    <p>Book your repair request online and we’ll contact you to confirm.</p>
-    <a href="/book" class="btn primary">Start Booking</a>
-</section>
-
-<footer>
-    <p>© 2026 Revive & Thrive Tech. All rights reserved.</p>
-    <p>Contact: <a href="tel:+13475539089">+1 (347) 553-9089</a> | <a href="mailto:youremail@gmail.com">youremail@gmail.com</a></p>
-</footer>
-
-</body>
-</html>
+{% endblock %}
