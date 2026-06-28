@@ -12,13 +12,10 @@ from config import BUSINESS_EMAIL, MAIL_USERNAME, MAIL_PASSWORD, TELEGRAM_BOT_TO
 
 app = Flask(__name__)
 load_dotenv()
-
 app.config["SECRET_KEY"] = os.environ.get("FLASK_SECRET_KEY", "revive-thrive-secret")
 app.config["DATABASE"] = os.path.join(os.path.dirname(__file__), "database.db")
 app.register_blueprint(booking_bp)
 
-app.config["SECRET_KEY"] = os.environ.get("FLASK_SECRET_KEY", "revive-thrive-secret")
-app.config["DATABASE"] = os.path.join(os.path.dirname(__file__), "database.db")
 def send_email(to_email, subject, body):
     if not MAIL_USERNAME or not MAIL_PASSWORD:
         print("Email credentials missing.")
@@ -176,158 +173,6 @@ def services():
     return render_template("services.html")
 
 
-@app.route("/book", methods=["GET", "POST"])
-def book():
-    if request.method == "POST":
-        form_data = {
-            key: request.form.get(key, "").strip()
-            for key in [
-                "customer_name",
-                "phone_number",
-                "email",
-                "device_type",
-                "device_model",
-                "service_needed",
-                "issue_description",
-                "preferred_date",
-            ]
-        }
-
-        if not all(form_data.values()):
-            flash("Please complete every field before submitting your booking.", "error")
-            return render_template("book.html", form=form_data)
-
-        try:
-            appointment_date = datetime.strptime(
-                form_data["preferred_date"], "%Y-%m-%d"
-            ).date()
-
-            if appointment_date < date.today():
-                raise ValueError("Past date")
-
-        except ValueError:
-            flash("Please select a valid appointment date today or in the future.", "error")
-            return render_template("book.html", form=form_data)
-
-        normalized_phone = normalize_phone_number(form_data["phone_number"])
-        created_at = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-
-        conn = get_db_connection()
-        cursor = conn.cursor()
-
-        cursor.execute(
-            """
-            INSERT INTO bookings (
-                customer_name,
-                phone_number,
-                phone_number_normalized,
-                device_type,
-                device_model,
-                service_needed,
-                issue_description,
-                preferred_date,
-                created_at
-            )
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
-            """,
-            (
-                form_data["customer_name"],
-                form_data["phone_number"],
-                normalized_phone,
-                form_data["device_type"],
-                form_data["device_model"],
-                form_data["service_needed"],
-                form_data["issue_description"],
-                form_data["preferred_date"],
-                created_at,
-            ),
-        )
-
-        # capture ticket id before closing connection
-        ticket_id = cursor.lastrowid
-
-        # generate ticket number and save it to the booking
-        ticket_code = NotificationService.generate_ticket_number()
-        try:
-            cursor.execute(
-                "UPDATE bookings SET ticket_code = ? WHERE id = ?",
-                (ticket_code, ticket_id),
-            )
-        except Exception:
-            pass
-
-        conn.commit()
-        conn.close()
-
-        form_data["ticket_number"] = ticket_code
-
-        # prepare notification messages
-        business_message = f"""
-    🔔 NEW BOOKING
-
-    Ticket: {ticket_code}
-    Customer: {form_data.get("customer_name")}
-    Phone: {form_data.get("phone_number")}
-    Device: {form_data.get("device_type")} {form_data.get("device_model")}
-    Service: {form_data.get("service_needed")}
-    Issue: {form_data.get("issue_description")}
-    Preferred Date: {form_data.get("preferred_date")}
-
-    Admin: https://revivethrivetech.com/admin
-    """
-
-        customer_message = f"""
-    Hi {form_data.get("customer_name")},
-
-    Thank you for booking with Revive & Thrive Tech.
-
-    Your repair request has been received.
-
-    Ticket: {ticket_code}
-    Device: {form_data.get("device_type")} {form_data.get("device_model")}
-    Service: {form_data.get("service_needed")}
-
-    Track your repair: https://revivethrivetech.com/status
-
-    We will contact you shortly to confirm your appointment.
-
-    - Revive & Thrive Tech
-    """
-
-        # Notify business via Telegram using NotificationService
-        try:
-            NotificationService.send_telegram_alert(form_data)
-        except Exception as e:
-            print(f"Business telegram notify failed: {e}")
-
-        try:
-            if BUSINESS_EMAIL:
-                send_email(
-                    BUSINESS_EMAIL,
-                    "New Repair Booking - Revive & Thrive Tech",
-                    business_message,
-                )
-        except Exception as e:
-            print(f"Business email notify failed: {e}")
-
-        # Notify customer (email)
-        try:
-            customer_email = form_data.get("email") or request.form.get("email")
-            if customer_email:
-                send_email(
-                    customer_email,
-                    "Your Revive & Thrive Tech Booking Confirmation",
-                    customer_message,
-                )
-        except Exception as e:
-            print(f"Customer email notify failed: {e}")
-
-        # (No SMS here — using email and Telegram notifications)
-
-        flash("Repair request submitted successfully. We will contact you soon.", "success")
-        return redirect(url_for("success"))
-
-    return render_template("book.html", form={})
 
 
 @app.route("/success")
