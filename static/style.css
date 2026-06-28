@@ -116,7 +116,7 @@ a:hover {
 header {
   background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
   color: white;
-  padding: 1.5rem 0;
+  padding: 1.1rem 0;
   box-shadow: var(--shadow-md);
   position: sticky;
   top: 0;
@@ -128,10 +128,12 @@ nav {
   justify-content: space-between;
   align-items: center;
   gap: 2rem;
+  padding: 0 40px;
 }
 
 .brand {
-  font-size: 1.5rem;
+  font-size: 1.6rem;
+  line-height: 1.1;
   font-weight: 700;
   display: flex;
   align-items: center;

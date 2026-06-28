@@ -7,17 +7,15 @@ import requests
 from email.message import EmailMessage
 from dotenv import load_dotenv
 from flask import Flask, render_template, request, redirect, url_for, flash, abort, jsonify
+from routes.booking_routes import booking_bp
+from config import BUSINESS_EMAIL, MAIL_USERNAME, MAIL_PASSWORD, TELEGRAM_BOT_TOKEN, TELEGRAM_CHAT_ID, STATUS_OPTIONS
 
 app = Flask(__name__)
 load_dotenv()
 
-# Notification / credentials
-BUSINESS_EMAIL = os.getenv("BUSINESS_EMAIL")
-MAIL_USERNAME = os.getenv("MAIL_USERNAME")
-MAIL_PASSWORD = os.getenv("MAIL_PASSWORD")
-
-TELEGRAM_BOT_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
-TELEGRAM_CHAT_ID = os.getenv("TELEGRAM_CHAT_ID")
+app.config["SECRET_KEY"] = os.environ.get("FLASK_SECRET_KEY", "revive-thrive-secret")
+app.config["DATABASE"] = os.path.join(os.path.dirname(__file__), "database.db")
+app.register_blueprint(booking_bp)
 
 app.config["SECRET_KEY"] = os.environ.get("FLASK_SECRET_KEY", "revive-thrive-secret")
 app.config["DATABASE"] = os.path.join(os.path.dirname(__file__), "database.db")
@@ -248,18 +246,20 @@ def book():
         # capture ticket id before closing connection
         ticket_id = cursor.lastrowid
 
-        # generate human-friendly ticket code and save it
-        ticket_code = f"RT-{int(ticket_id):04d}"
+        # generate ticket number and save it to the booking
+        ticket_code = NotificationService.generate_ticket_number()
         try:
             cursor.execute(
-            "UPDATE bookings SET ticket_code = ? WHERE id = ?",
-            (ticket_code, ticket_id),
+                "UPDATE bookings SET ticket_code = ? WHERE id = ?",
+                (ticket_code, ticket_id),
             )
         except Exception:
             pass
 
         conn.commit()
         conn.close()
+
+        form_data["ticket_number"] = ticket_code
 
         # prepare notification messages
         business_message = f"""
@@ -294,9 +294,9 @@ def book():
     - Revive & Thrive Tech
     """
 
-        # Notify business via Telegram and email
+        # Notify business via Telegram using NotificationService
         try:
-            send_telegram(business_message)
+            NotificationService.send_telegram_alert(form_data)
         except Exception as e:
             print(f"Business telegram notify failed: {e}")
 
