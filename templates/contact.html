@@ -1,51 +1,37 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Contact | Revive & Thrive Tech</title>
-  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
-</head>
-<body>
-<header>
-  <div class="container">
-    <nav>
-      <div class="brand">Revive <span>&</span> Thrive Tech</div>
-      <div class="nav-links">
-        <a href="/">Home</a>
-        <a href="/services">Services</a>
-        <a href="/book">Book Repair</a>
-        <a href="/status">Track Repair</a>
-        <a href="/contact">Contact</a>
+{% extends 'base.html' %}
+
+{% block title %}Contact | Revive & Thrive Tech{% endblock %}
+
+{% block content %}
+  <section class="section">
+    <h1>Contact Us</h1>
+    <p>Have a question or need help? Send us a message and we'll get back to you quickly.</p>
+
+    <form method="post" action="/contact" class="form">
+      <div class="form-row">
+        <div class="field-group">
+          <label for="name">Name</label>
+          <input id="name" name="name" required type="text" value="{{ form.get('name','') if form else '' }}" />
+        </div>
       </div>
-    </nav>
-  </div>
-</header>
-  <main>
-    <section class="section container">
-      <h1>Contact Us</h1>
-      <p>Have a question or need help? Send us a message and we'll get back to you.</p>
 
-      <form method="post" action="/contact" class="contact-form">
-        <label for="name">Name</label>
-        <input id="name" name="name" required type="text" value="{{ form.get('name','') if form else '' }}" />
+      <div class="form-row">
+        <div class="field-group">
+          <label for="email">Email</label>
+          <input id="email" name="email" required type="email" value="{{ form.get('email','') if form else '' }}" />
+        </div>
+      </div>
 
-        <label for="email">Email</label>
-        <input id="email" name="email" required type="email" value="{{ form.get('email','') if form else '' }}" />
+      <div class="form-row">
+        <div class="field-group">
+          <label for="message">Message</label>
+          <textarea id="message" name="message" required>{{ form.get('message','') if form else '' }}</textarea>
+        </div>
+      </div>
 
-        <label for="message">Message</label>
-        <textarea id="message" name="message" required>{{ form.get('message','') if form else '' }}</textarea>
-
-        <button type="submit" class="btn primary">Send Message</button>
-      </form>
-    </section>
-  </main>
-
-  <footer>
-    <div class="container">
-      © 2026 Revive & Thrive Tech
-    </div>
-  </footer>
-
-</body>
-</html>
+      <div class="form-actions">
+        <button type="submit" class="button button-primary">Send Message</button>
+      </div>
+    </form>
+  </section>
+{% endblock %}

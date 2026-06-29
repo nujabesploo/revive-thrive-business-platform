@@ -1,16 +1,18 @@
+<img src="{{ s3_url('hero/hero-repair.jpg') }}" alt="Revive & Thrive repair work">
 {% extends 'base.html' %}
 
 {% block title %}Home | Revive & Thrive Tech{% endblock %}
 
 {% block content %}
   <section class="bg-gradient-to-r from-indigo-50 to-white dark:from-gray-800 dark:to-gray-900">
-    <div class="container mx-auto px-4 py-20 text-center">
+    <div class="container mx-auto px-4 py-16 text-center">
+      <img src="{{ s3_url('hero/hero-repair.jpg') }}" alt="Repair service" class="hero-image mx-auto mb-8" onerror="this.style.display='none';" />
       <p class="text-sm text-indigo-600 font-semibold">Arlington, TX • Phone Repair</p>
       <h1 class="mt-4 text-4xl md:text-5xl font-extrabold text-gray-900 dark:text-white">Fast, Reliable Phone Repair You Can Trust</h1>
-      <p class="mt-3 text-gray-600 dark:text-gray-300">iPhone • Samsung • Tablet Repair • Screen Repair • Battery Replacement</p>
-      <div class="mt-6 flex items-center justify-center gap-4">
-        <a href="/book" class="px-6 py-3 bg-indigo-600 text-white rounded-md hover:bg-indigo-500">Book a Repair</a>
-        <a href="tel:+13475539089" class="px-6 py-3 border border-gray-300 rounded-md text-gray-700 dark:text-gray-200">Call Now</a>
+      <p class="mt-3 text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">iPhone • Samsung • Tablet Repair • Screen Repair • Battery Replacement</p>
+      <div class="mt-6 flex flex-col items-center justify-center gap-4 sm:flex-row">
+        <a href="/book" class="button button-primary">Book a Repair</a>
+        <a href="tel:+13475539089" class="button button-secondary">Call Now</a>
       </div>
     </div>
   </section>

@@ -8,13 +8,38 @@ from email.message import EmailMessage
 from dotenv import load_dotenv
 from flask import Flask, render_template, request, redirect, url_for, flash, abort, jsonify
 from routes.booking_routes import booking_bp
+from services.s3_service import get_s3_url
 from config import BUSINESS_EMAIL, MAIL_USERNAME, MAIL_PASSWORD, TELEGRAM_BOT_TOKEN, TELEGRAM_CHAT_ID, STATUS_OPTIONS
+from services.s3_service import S3Service
 
 app = Flask(__name__)
+s3_service = S3Service()
+
+@app.context_processor
+def inject_s3_helpers():
+    return {
+        "s3_url": s3_service.get_s3_url
+    }
 load_dotenv()
 app.config["SECRET_KEY"] = os.environ.get("FLASK_SECRET_KEY", "revive-thrive-secret")
 app.config["DATABASE"] = os.path.join(os.path.dirname(__file__), "database.db")
 app.register_blueprint(booking_bp)
+
+@app.context_processor
+def inject_s3_url():
+    def s3_url(key):
+        safe_key = key.lstrip("/")
+        url = get_s3_url(safe_key)
+        if url:
+            return url
+        return url_for("static", filename=f"images/{safe_key}")
+    return {"s3_url": s3_url}
+
+def ensure_database():
+    try:
+        init_db()
+    except Exception as e:
+        print(f"Database initialization error: {e}")
 
 def send_email(to_email, subject, body):
     if not MAIL_USERNAME or not MAIL_PASSWORD:
@@ -43,24 +68,16 @@ def send_telegram(message):
 
     url = f"https://api.telegram.org/bot{TELEGRAM_BOT_TOKEN}/sendMessage"
     try:
-        requests.post(url, data={
+        response = requests.post(url, data={
             "chat_id": TELEGRAM_CHAT_ID,
             "text": message,
         })
-        print("Telegram sent.")
+        if response.status_code != 200:
+            print(f"Telegram failed with status {response.status_code}: {response.text}")
+        else:
+            print("Telegram sent.")
     except Exception as e:
         print(f"Telegram failed: {e}")
-
-
-STATUS_OPTIONS = [
-    "New Request",
-    "Received",
-    "Diagnosing",
-    "Waiting For Parts",
-    "In Repair",
-    "Completed",
-    "Delivered",
-]
 
 
 def normalize_phone_number(phone):
@@ -587,7 +604,7 @@ def find_available_port(host, preferred_port=5000, max_tries=20):
 
 
 if __name__ == "__main__":
-    init_db()
+    ensure_database()
     host = os.environ.get("FLASK_RUN_HOST", "0.0.0.0")
     configured_port = os.environ.get("PORT", 5000)
     port = find_available_port(host, configured_port)

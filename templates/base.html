@@ -11,24 +11,23 @@
 </head>
 <body>
 <header class="bg-white dark:bg-gray-900 shadow">
-  <div class="container mx-auto px-4 py-4 flex items-center justify-between">
-    <div class="flex items-center gap-4">
-      <div class="text-2xl font-bold text-indigo-600">Revive <span class="text-gray-700 dark:text-gray-200">&</span> Thrive Tech</div>
-      <nav class="hidden md:flex gap-4 text-sm text-gray-700 dark:text-gray-200">
-        <a href="/" class="hover:underline">Home</a>
-        <a href="/services" class="hover:underline">Services</a>
-        <a href="/book" class="hover:underline">Book Repair</a>
-        <a href="/status" class="hover:underline">Track Repair</a>
-        <a href="/inventory" class="hover:underline">Inventory</a>
-        <a href="/contact" class="hover:underline">Contact</a>
-        <a href="/admin" class="hover:underline">Admin</a>
-      </nav>
-    </div>
+  <div class="container mx-auto px-4 py-3 flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
     <div class="flex items-center gap-3">
-      <button id="dark-toggle" aria-label="Toggle dark mode" class="bg-gray-100 dark:bg-gray-800 p-2 rounded">
-        🌙
-      </button>
+      <div class="brand">
+        <span class="brand-logo">R</span>
+        <span class="brand-text">Revive <span> & </span> Thrive Tech</span>
+      </div>
     </div>
+    <nav class="flex flex-wrap gap-3 text-sm text-gray-700 dark:text-gray-200 justify-center md:justify-end">
+      <a href="/" class="nav-link">Home</a>
+      <a href="/services" class="nav-link">Services</a>
+      <a href="/book" class="nav-link">Book Repair</a>
+      <a href="/status" class="nav-link">Track Repair</a>
+      <a href="/inventory" class="nav-link">Inventory</a>
+      <a href="/contact" class="nav-link">Contact</a>
+      <a href="/admin" class="nav-link">Admin</a>
+      <button id="dark-toggle" aria-label="Toggle dark mode" class="dark-toggle">🌙</button>
+    </nav>
   </div>
 </header>
 
