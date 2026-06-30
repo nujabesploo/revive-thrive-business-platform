@@ -4,13 +4,13 @@
 
 {% block content %}
   <section class="hero" data-reveal>
-    <video autoplay muted loop playsinline poster="{{ s3_url('hero/repair-technician.jpg') }}" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
-      <source src="{{ s3_url('hero/hero-commercial.mp4') }}" type="video/mp4">
+    <video autoplay muted loop playsinline poster="{{ media_url('hero/repair-technician.jpg') }}" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+      <source src="{{ media_url('hero/hero-commercial.mp4') }}" type="video/mp4">
     </video>
-    <img class="hero-fallback" src="{{ s3_url('hero/repair-technician.jpg') }}" alt="Repair technician at work" />
+    <img class="hero-fallback" src="{{ media_url('hero/repair-technician.jpg') }}" alt="Repair technician at work" />
 
     <div class="hero-overlay">
-      <img class="hero-logo" src="{{ s3_url('logo/logo.png') }}" alt="Revive and Thrive Tech logo" />
+      <img class="hero-logo" src="{{ media_url('logo/logo.png') }}" alt="Revive and Thrive Tech logo" />
       <h1>Fast, Reliable Device Repair in Arlington, TX</h1>
       <p>Same-day repairs for phones, tablets, controllers, and tech devices.</p>
       <div class="hero-actions">
@@ -29,10 +29,10 @@
     <h2 class="home-section-title">Inside Revive & Thrive</h2>
     <div class="gallery-grid">
       <figure class="gallery-card">
-        <img src="{{ s3_url('gallery/before-after.jpg') }}" alt="Before and after repair comparison" loading="lazy" />
+        <img src="{{ media_url('gallery/before-after.jpg') }}" alt="Before and after repair comparison" loading="lazy" />
       </figure>
       <figure class="gallery-card">
-        <img src="{{ s3_url('gallery/customer-service.jpg') }}" alt="Customer service at Revive and Thrive Tech" loading="lazy" />
+        <img src="{{ media_url('gallery/customer-service.jpg') }}" alt="Customer service at Revive and Thrive Tech" loading="lazy" />
       </figure>
     </div>
   </section>

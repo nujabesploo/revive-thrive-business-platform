@@ -1,6 +1,5 @@
 import os
 import re
-import sqlite3
 import secrets
 from datetime import datetime, date
 from functools import wraps
@@ -9,6 +8,8 @@ import requests
 from email.message import EmailMessage
 from dotenv import load_dotenv
 from flask import Flask, render_template, request, redirect, url_for, flash, abort, jsonify, session
+from database import get_db_connection, init_db, init_db_app
+from media import init_media_app, media_url
 
 app = Flask(__name__)
 load_dotenv()
@@ -24,23 +25,14 @@ ADMIN_USERNAME = os.getenv("ADMIN_USERNAME", "admin")
 ADMIN_PASSWORD = os.getenv("ADMIN_PASSWORD", "change-me")
 
 app.config["SECRET_KEY"] = os.environ.get("FLASK_SECRET_KEY", "revive-thrive-secret")
-app.config["DATABASE"] = os.path.join(os.path.dirname(__file__), "database.db")
-S3_BASE_URL = os.getenv("S3_BASE_URL", "").strip().rstrip("/")
-
-
-def s3_url(path):
-    clean_path = (path or "").lstrip("/")
-    if not clean_path:
-        return ""
-    if S3_BASE_URL:
-        return f"{S3_BASE_URL}/{clean_path}"
-    return url_for("static", filename=clean_path)
+init_db_app(app)
+init_media_app(app)
 
 
 @app.context_processor
 def inject_template_helpers():
     return {
-        "s3_url": s3_url,
+        "media_url": media_url,
         "is_admin_authenticated": session.get("is_admin") is True,
     }
 
@@ -118,102 +110,6 @@ STATUS_OPTIONS = [
 
 def normalize_phone_number(phone):
     return re.sub(r"[^0-9]", "", phone or "")
-
-
-def get_db_connection():
-    conn = sqlite3.connect(app.config["DATABASE"])
-    conn.row_factory = sqlite3.Row
-    return conn
-
-
-def add_column_if_missing(cursor, table_name, column_name, column_definition):
-    cursor.execute(f"PRAGMA table_info({table_name})")
-    existing_columns = [column[1] for column in cursor.fetchall()]
-
-    if column_name not in existing_columns:
-        cursor.execute(
-            f"ALTER TABLE {table_name} ADD COLUMN {column_name} {column_definition}"
-        )
-
-
-def init_db():
-    conn = get_db_connection()
-    cursor = conn.cursor()
-
-    cursor.execute(
-        """
-        CREATE TABLE IF NOT EXISTS bookings (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            customer_name TEXT NOT NULL,
-            phone_number TEXT NOT NULL,
-            device_type TEXT NOT NULL,
-            device_model TEXT NOT NULL,
-            service_needed TEXT NOT NULL,
-            issue_description TEXT NOT NULL,
-            preferred_date TEXT NOT NULL,
-            status TEXT DEFAULT 'New Request',
-            created_at TEXT NOT NULL
-        )
-        """
-    )
-
-    add_column_if_missing(
-        cursor,
-        "bookings",
-        "phone_number_normalized",
-        "TEXT NOT NULL DEFAULT ''",
-    )
-
-    add_column_if_missing(
-        cursor,
-        "bookings",
-        "repair_cost",
-        "REAL DEFAULT 0",
-    )
-
-    add_column_if_missing(
-        cursor,
-        "bookings",
-        "notes",
-        "TEXT DEFAULT ''",
-    )
-
-    add_column_if_missing(
-        cursor,
-        "bookings",
-        "ticket_code",
-        "TEXT DEFAULT ''",
-    )
-
-    cursor.execute("SELECT id, phone_number FROM bookings")
-    rows = cursor.fetchall()
-
-    for row in rows:
-        normalized = normalize_phone_number(row["phone_number"])
-        cursor.execute(
-            "UPDATE bookings SET phone_number_normalized = ? WHERE id = ?",
-            (normalized, row["id"]),
-        )
-
-    # Inventory table
-    cursor.execute(
-        """
-        CREATE TABLE IF NOT EXISTS inventory (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            item_name TEXT NOT NULL,
-            category TEXT NOT NULL,
-            quantity INTEGER DEFAULT 0,
-            cost REAL DEFAULT 0,
-            supplier TEXT,
-            reorder_level INTEGER DEFAULT 5,
-            created_at TEXT NOT NULL,
-            updated_at TEXT NOT NULL
-        )
-        """
-    )
-
-    conn.commit()
-    conn.close()
 
 
 @app.route("/")
