@@ -99,6 +99,60 @@ curl -fsS http://127.0.0.1/health
 
 Detailed guide: `deploy/README-EC2.md`
 
+## Infrastructure as Code (Terraform)
+Terraform files live in `infrastructure/terraform`.
+
+```bash
+cd infrastructure/terraform
+cp terraform.tfvars.example terraform.tfvars
+terraform init
+terraform validate
+terraform plan
+terraform apply
+```
+
+## Configuration as Code (Ansible)
+Ansible automation lives in `ansible`.
+
+```bash
+cd ansible
+cp inventory.ini.example inventory.ini
+cp group_vars/all.yml.example group_vars/all.yml
+ansible-playbook -i inventory.ini site.yml
+```
+
+## Kubernetes Baseline
+Kubernetes manifests live in `k8s/base`.
+
+```bash
+kubectl apply -f k8s/base/namespace.yaml
+kubectl apply -f k8s/base/configmap.yaml
+kubectl apply -f k8s/base/secret.example.yaml
+kubectl apply -f k8s/base/deployment.yaml
+kubectl apply -f k8s/base/service.yaml
+kubectl apply -f k8s/base/ingress.yaml
+kubectl apply -f k8s/base/hpa.yaml
+```
+
+## Monitoring (Prometheus)
+Monitoring files live in `monitoring/prometheus`.
+
+```bash
+cd monitoring/prometheus
+docker compose up -d
+```
+
+Prometheus UI: `http://127.0.0.1:9090`
+
+## DevOps Bash Automation
+Operational scripts live in `scripts`.
+
+```bash
+./scripts/bootstrap_devops.sh
+./scripts/health_check.sh
+./scripts/deploy_ec2.sh
+```
+
 ## This Week DevOps Targets
 - Stabilize production endpoints and error handling
 - Keep Docker image runnable locally

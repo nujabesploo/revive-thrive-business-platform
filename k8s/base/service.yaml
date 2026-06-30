@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: revive-thrive-service
+  namespace: revive-thrive
+spec:
+  selector:
+    app: revive-thrive
+  ports:
+    - name: http
+      port: 80
+      targetPort: 5000
+  type: ClusterIP

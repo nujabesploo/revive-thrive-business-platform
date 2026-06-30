@@ -1,0 +1,15 @@
+[Unit]
+Description=Revive Thrive Flask App
+After=network.target
+
+[Service]
+User=ubuntu
+Group=www-data
+WorkingDirectory={{ project_dir }}
+Environment="PATH={{ python_venv }}/bin"
+ExecStart={{ python_venv }}/bin/gunicorn --workers {{ gunicorn_workers }} --bind {{ app_bind }} app:app
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target

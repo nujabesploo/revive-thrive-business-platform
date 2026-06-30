@@ -1,0 +1,14 @@
+---
+- name: Reload systemd
+  ansible.builtin.systemd:
+    daemon_reload: true
+
+- name: Restart revive-thrive
+  ansible.builtin.systemd:
+    name: revive-thrive
+    state: restarted
+
+- name: Restart nginx
+  ansible.builtin.systemd:
+    name: nginx
+    state: restarted

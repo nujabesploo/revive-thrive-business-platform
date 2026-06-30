@@ -1,0 +1,5 @@
+project_dir: /home/ubuntu/projects/revive-thrive-business-platform
+python_venv: "{{ project_dir }}/venv"
+gunicorn_workers: 3
+app_bind: 127.0.0.1:5000
+server_name: "revivethrivetech.com www.revivethrivetech.com"

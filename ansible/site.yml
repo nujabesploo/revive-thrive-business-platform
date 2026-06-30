@@ -1,0 +1,10 @@
+---
+- name: Configure Revive & Thrive application server
+  hosts: web
+  become: true
+
+  vars_files:
+    - group_vars/all.yml
+
+  roles:
+    - app

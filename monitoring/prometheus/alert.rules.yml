@@ -1,0 +1,11 @@
+groups:
+  - name: revive-thrive-alerts
+    rules:
+      - alert: AppHealthEndpointDown
+        expr: up{job="revive-thrive-health"} == 0
+        for: 2m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Revive & Thrive health endpoint is down"
+          description: "Prometheus cannot scrape the /health endpoint for 2 minutes."
