@@ -214,6 +214,11 @@ def home():
     return render_template("index.html")
 
 
+@app.route("/health")
+def health():
+    return {"status": "healthy", "service": "revive-thrive-tech"}, 200
+
+
 @app.route("/services")
 def services():
     return render_template("services.html")
