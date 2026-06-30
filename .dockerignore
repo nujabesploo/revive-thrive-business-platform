@@ -1,8 +1,8 @@
 venv/
+.env
+database.db
 __pycache__/
 *.pyc
-.git
-screenshots
-database.db
-.env
+.git/
 .DS_Store
+screenshots/
