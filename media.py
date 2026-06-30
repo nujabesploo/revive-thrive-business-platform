@@ -1,4 +1,5 @@
 from flask import current_app, url_for
+from media_config import MEDIA_ASSETS
 
 
 def _normalize_base_url(raw_url: str) -> str:
@@ -37,3 +38,4 @@ def init_media_app(app) -> None:
     # place and remains consistent across EC2, Docker, and Kubernetes.
     app.config["MEDIA_BASE_URL"] = _normalize_base_url(app.config.get("MEDIA_BASE_URL", ""))
     app.jinja_env.globals["media_url"] = media_url
+    app.jinja_env.globals["MEDIA_ASSETS"] = MEDIA_ASSETS

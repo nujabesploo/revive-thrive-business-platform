@@ -1,15 +1,18 @@
+# Human-readable prefix used to name AWS resources.
 variable "project_name" {
   description = "Project name prefix"
   type        = string
   default     = "revive-thrive"
 }
 
+# Deployment region (requested: us-east-1 default).
 variable "aws_region" {
   description = "AWS region"
   type        = string
   default     = "us-east-1"
 }
 
+# Networking variables below allow easy edits later without changing resource blocks.
 variable "vpc_cidr" {
   description = "VPC CIDR block"
   type        = string
@@ -28,6 +31,7 @@ variable "availability_zone" {
   default     = "us-east-1a"
 }
 
+# EC2 sizing and image settings.
 variable "instance_type" {
   description = "EC2 instance type"
   type        = string
@@ -39,6 +43,7 @@ variable "ami_id" {
   type        = string
 }
 
+# SSH access scope for admins.
 variable "allowed_ssh_cidr" {
   description = "CIDR allowed for SSH"
   type        = string
@@ -54,4 +59,10 @@ variable "domain_name" {
   description = "Primary domain name"
   type        = string
   default     = "revivethrivetech.com"
+}
+
+variable "cloudfront_domain_placeholder" {
+  description = "CloudFront distribution domain placeholder (set after distribution is created)"
+  type        = string
+  default     = "pending-cloudfront-domain"
 }

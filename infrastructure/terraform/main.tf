@@ -1,10 +1,12 @@
 locals {
+  # Shared tags make AWS resources easier to search and manage.
   tags = {
     Project = var.project_name
     Managed = "terraform"
   }
 }
 
+# Core network for EC2 and related resources.
 resource "aws_vpc" "main" {
   cidr_block           = var.vpc_cidr
   enable_dns_hostnames = true
@@ -48,6 +50,7 @@ resource "aws_security_group" "web" {
   description = "Allow web and ssh traffic"
   vpc_id      = aws_vpc.main.id
 
+  # SSH for administration.
   ingress {
     from_port   = 22
     to_port     = 22
@@ -55,6 +58,7 @@ resource "aws_security_group" "web" {
     cidr_blocks = [var.allowed_ssh_cidr]
   }
 
+  # HTTP for web traffic.
   ingress {
     from_port   = 80
     to_port     = 80
@@ -62,6 +66,7 @@ resource "aws_security_group" "web" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
+  # HTTPS for secure traffic.
   ingress {
     from_port   = 443
     to_port     = 443
@@ -123,6 +128,7 @@ resource "aws_instance" "app" {
   tags = merge(local.tags, { Name = "${var.project_name}-app" })
 }
 
+# Elastic IP keeps a stable public address for DNS records.
 resource "aws_eip" "app" {
   domain   = "vpc"
   instance = aws_instance.app.id
@@ -130,6 +136,7 @@ resource "aws_eip" "app" {
   tags = merge(local.tags, { Name = "${var.project_name}-eip" })
 }
 
+# S3 bucket stores media assets (served through CloudFront later).
 resource "aws_s3_bucket" "media" {
   bucket = "${var.project_name}-media-${data.aws_caller_identity.current.account_id}"
   tags   = merge(local.tags, { Name = "${var.project_name}-media" })

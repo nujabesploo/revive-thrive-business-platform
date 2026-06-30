@@ -4,18 +4,18 @@
 
 {% block content %}
   <section class="hero" data-reveal>
-    <video autoplay muted loop playsinline poster="{{ media_url('hero/repair-technician.jpg') }}" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
-      <source src="{{ media_url('hero/hero-commercial.mp4') }}" type="video/mp4">
+    <video autoplay muted loop playsinline poster="{{ media_url(MEDIA_ASSETS['hero']['image']) }}" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+      <source src="{{ media_url(MEDIA_ASSETS['hero']['video']) }}" type="video/mp4">
     </video>
-    <img class="hero-fallback" src="{{ media_url('hero/repair-technician.jpg') }}" alt="Repair technician at work" />
+    <img class="hero-fallback" src="{{ media_url(MEDIA_ASSETS['hero']['image']) }}" alt="Repair technician at work" />
 
     <div class="hero-overlay">
-      <img class="hero-logo" src="{{ media_url('logo/logo.png') }}" alt="Revive and Thrive Tech logo" />
+      <img class="hero-logo" src="{{ media_url(MEDIA_ASSETS['logo']['primary']) }}" alt="Revive and Thrive Tech logo" />
       <h1>Fast, Reliable Device Repair in Arlington, TX</h1>
       <p>Same-day repairs for phones, tablets, controllers, and tech devices.</p>
       <div class="hero-actions">
         <a href="/book" class="btn">Book Repair</a>
-        <a href="tel:+13475539089" class="btn btn-secondary">Call Now</a>
+        <a href="tel:+13476715335" class="btn btn-secondary">Call Now</a>
       </div>
       <div class="hero-badges" aria-label="Trust badges">
         <span class="badge-chip">Same-Day Service</span>
@@ -29,12 +29,26 @@
     <h2 class="home-section-title">Inside Revive & Thrive</h2>
     <div class="gallery-grid">
       <figure class="gallery-card">
-        <img src="{{ media_url('gallery/before-after.jpg') }}" alt="Before and after repair comparison" loading="lazy" />
+        <img src="{{ media_url(MEDIA_ASSETS['gallery']['technician_repair']) }}" alt="Technician performing a device repair" loading="lazy" />
       </figure>
       <figure class="gallery-card">
-        <img src="{{ media_url('gallery/customer-service.jpg') }}" alt="Customer service at Revive and Thrive Tech" loading="lazy" />
+        <img src="{{ media_url(MEDIA_ASSETS['gallery']['customer_service']) }}" alt="Customer service at Revive and Thrive Tech" loading="lazy" />
+      </figure>
+      <figure class="gallery-card">
+        <img src="{{ media_url(MEDIA_ASSETS['gallery']['before_after']) }}" alt="Before and after repair comparison" loading="lazy" />
       </figure>
     </div>
+  </section>
+
+  <section class="container mx-auto px-4 home-section" data-reveal>
+    <h2 class="home-section-title">Shop Anthem</h2>
+    <p class="section-lead">Play the official Revive & Thrive anthem while you browse.</p>
+    <div class="final-cta-actions">
+      <button id="anthem-toggle" type="button" class="button button-primary" aria-pressed="false">Play Anthem</button>
+    </div>
+    <audio id="anthem-audio" preload="none">
+      <source src="{{ media_url(MEDIA_ASSETS['audio']['anthem']) }}" type="audio/mpeg">
+    </audio>
   </section>
 
   <section class="container mx-auto px-4 home-section home-features" data-reveal>
@@ -82,11 +96,36 @@
       <p>Book online in minutes or call us now for immediate repair support in Arlington.</p>
       <div class="final-cta-actions">
         <a href="/book" class="button button-primary">Book Repair</a>
-        <a href="tel:+13475539089" class="button button-contrast">Call Now</a>
+        <a href="tel:+13476715335" class="button button-contrast">Call Now</a>
       </div>
     </div>
   </section>
 
   {% include '_testimonials.html' %}
+
+  <script>
+    (function () {
+      const audio = document.getElementById('anthem-audio');
+      const toggle = document.getElementById('anthem-toggle');
+      if (!audio || !toggle) return;
+
+      toggle.addEventListener('click', function () {
+        if (audio.paused) {
+          audio.play();
+          toggle.textContent = 'Pause Anthem';
+          toggle.setAttribute('aria-pressed', 'true');
+        } else {
+          audio.pause();
+          toggle.textContent = 'Play Anthem';
+          toggle.setAttribute('aria-pressed', 'false');
+        }
+      });
+
+      audio.addEventListener('ended', function () {
+        toggle.textContent = 'Play Anthem';
+        toggle.setAttribute('aria-pressed', 'false');
+      });
+    })();
+  </script>
 
 {% endblock %}
