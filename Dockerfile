@@ -9,4 +9,6 @@ COPY . .
 
 EXPOSE 5000
 
-CMD ["python3", "app.py"]
+ENV PORT=5000
+
+CMD ["sh", "-c", "gunicorn --workers ${GUNICORN_WORKERS:-3} --bind 0.0.0.0:${PORT:-5000} app:app"]

@@ -1,114 +1,107 @@
-# Revive & Thrive Tech - Inventory Management System
+# Revive & Thrive Tech Platform
 
-## Project Overview
-Revive & Thrive Tech is a full-stack inventory management and repair booking platform built with Flask, SQLite, and modern responsive HTML/CSS. The app supports technicians and administrators to track repair inventory, manage repair requests, and monitor stock levels.
+Production-ready Flask platform for repair booking, ticket management, and inventory operations. This repository is the flagship DevOps portfolio project for Revive & Thrive Tech.
 
-## Business Problem
-Repair technicians need a streamlined system to track parts inventory, manage repair tickets, and access real-time status without relying on spreadsheets or email chains.
+## Core Features
+- Customer booking workflow with email + Telegram business alerts
+- Admin-authenticated dashboard, ticket updates, and inventory controls
+- Public marketing homepage with S3-hosted brand media
+- Health endpoint for uptime probes: `GET /health`
+- Branded custom error pages (`404` and `500`)
 
-## Solution
-This platform provides:
-- Repair booking and ticketing workflow
-- Inventory dashboard for repair parts
-- Inventory CRUD operations
-- Repair status tracking for customers
-- Admin dashboard for ticket overview
-- REST API endpoints for inventory and bookings
-- Deployment-ready Docker and EC2 support
-
-## Features
-
-### Inventory Dashboard
-- Total inventory items
-- Low stock items
-- Total inventory value
-- Out-of-stock count
-- Search and category filters
-- Add, edit, delete inventory items
-
-### Repair Management
-- Book repair requests
-- Track repair status by phone
-- Admin ticket management
-- Update repair status, cost, and notes
-
-### API Endpoints
-- `GET /api/inventory`
-- `GET /api/inventory/<id>`
-- `GET /api/bookings`
-
-### Deployment
-- Docker containerization
-- EC2 deployment with systemd and NGINX
-- HTTPS support via Certbot
-
-## Tech Stack
-- Python 3
-- Flask
-- SQLite
-- HTML/CSS
-- Gunicorn
-- NGINX
-- Docker
-
-## Getting Started
-
-### Local Setup
-1. Clone the repo:
-   ```bash
-   git clone <repo-url>
-   cd revive-thrive-business-platform
-   ```
-2. Create a virtual environment and install dependencies:
-   ```bash
-   python3 -m venv venv
-   source venv/bin/activate
-   pip install -r requirements.txt
-   ```
-3. Run the app:
-   ```bash
-   python3 app.py
-   ```
-4. Open in browser:
-   ```bash
-   http://localhost:5000
-   ```
-
-## Docker Setup
-
-```bash
-docker build -t revive-thrive-platform .
-docker run -p 5000:5000 revive-thrive-platform
+## Architecture
+```
+Browser
+  -> Nginx (TLS termination, reverse proxy)
+    -> Gunicorn (systemd-managed)
+      -> Flask app
+        -> SQLite (current)
+        -> S3 media
+        -> Telegram Bot API
 ```
 
-## EC2 Deployment
+## Quick Start (Local)
+```bash
+python3 -m venv venv
+source venv/bin/activate
+pip install -r requirements.txt
+python app.py
+```
 
-A deployment guide is available in `deploy/README-EC2.md`.
+App URLs:
+- `http://127.0.0.1:5000` (or next available port)
+- `http://127.0.0.1:5000/health`
 
-## Project Structure
+## Environment Variables
+Set these in `.env`:
 
-- `app.py` — Flask application
-- `templates/` — Jinja2 HTML templates
-- `static/style.css` — app styling
-- `deploy/` — EC2 deployment templates and script
-- `Dockerfile` — container image build
-- `.dockerignore` — Docker ignore rules
+```env
+FLASK_SECRET_KEY=change-me
+BUSINESS_EMAIL=you@example.com
+MAIL_USERNAME=your-smtp-user
+MAIL_PASSWORD=your-smtp-password
 
-## Future Improvements
-- Domain and SSL automation
-- Inventory auto deduction from repair bookings
-- Email notifications for customers
-- CI/CD pipeline
-- Multi-store inventory support
+TELEGRAM_BOT_TOKEN=...
+TELEGRAM_CHAT_ID=...
 
-## Screenshots
-Add screenshots of:
-- Homepage
-- Admin dashboard
-- Add inventory page
-- Edit inventory page
-- API JSON response
-- Running on HTTPS
+S3_BASE_URL=https://your-cloudfront-or-s3-base-url
 
-## Business Value
-This application helps Revive & Thrive Tech reduce manual inventory management, increase repair visibility, and improve customer service with a polished web interface.
+ADMIN_USERNAME=admin
+ADMIN_PASSWORD=change-this-password
+```
+
+## Docker
+The container now runs with Gunicorn by default.
+
+Build:
+```bash
+docker build -t revive-thrive-platform .
+```
+
+Run:
+```bash
+docker run --rm -p 5000:5000 --env-file .env revive-thrive-platform
+```
+
+Test:
+```bash
+curl http://127.0.0.1:5000/health
+```
+
+## CI/CD (GitHub Actions)
+### CI Workflow
+File: `.github/workflows/ci.yml`
+
+Runs on push/PR:
+- dependency install
+- Python syntax check
+- Flask route smoke tests
+- Docker build validation
+
+### EC2 Deploy Workflow
+File: `.github/workflows/deploy-ec2.yml`
+
+Runs on push to `main` (or manual trigger) and deploys via SSH.
+
+Required repository secrets:
+- `EC2_HOST`
+- `EC2_USER`
+- `EC2_SSH_KEY`
+
+## EC2 Deployment (Manual)
+```bash
+cd ~/projects/revive-thrive-business-platform
+git pull origin main
+sudo systemctl restart revive-thrive
+sudo systemctl reload nginx
+curl -fsS http://127.0.0.1/health
+```
+
+Detailed guide: `deploy/README-EC2.md`
+
+## This Week DevOps Targets
+- Stabilize production endpoints and error handling
+- Keep Docker image runnable locally
+- Keep CI green on each push
+- Enable push-to-deploy with GitHub Actions
+- Maintain deployment docs as a real team runbook

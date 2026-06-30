@@ -4,3 +4,5 @@ __pycache__/
 .git
 screenshots
 database.db
+.env
+.DS_Store
