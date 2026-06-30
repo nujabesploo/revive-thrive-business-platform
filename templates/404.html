@@ -1,18 +1,13 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Page Not Found | Revive & Thrive Tech</title>
-  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
-</head>
-<body>
-<main class="section container">
-  <div class="card">
-    <h1>404 — Page not found</h1>
-    <p>The page you requested does not exist. Use the menu or return home to continue.</p>
-    <a class="button" href="/">Return home</a>
-  </div>
-</main>
-</body>
-</html>
+{% extends 'base.html' %}
+
+{% block title %}Page Not Found | Revive & Thrive Tech{% endblock %}
+
+{% block content %}
+  <section class="section" data-reveal>
+    <div class="card">
+      <h1>404 — Page not found</h1>
+      <p>The page you requested does not exist. Use the menu or return home to continue.</p>
+      <a class="button button-primary" href="/">Return home</a>
+    </div>
+  </section>
+{% endblock %}

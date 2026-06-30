@@ -10,17 +10,30 @@
     <img class="hero-fallback" src="{{ s3_url('hero/repair-technician.jpg') }}" alt="Repair technician at work" />
 
     <div class="hero-overlay">
+      <img class="hero-logo" src="{{ s3_url('logo/logo.png') }}" alt="Revive and Thrive Tech logo" />
       <h1>Fast, Reliable Device Repair in Arlington, TX</h1>
       <p>Same-day repairs for phones, tablets, controllers, and tech devices.</p>
       <div class="hero-actions">
         <a href="/book" class="btn">Book Repair</a>
-        <a href="tel:+13476715335" class="btn btn-secondary">Call Now</a>
+        <a href="tel:+13475539089" class="btn btn-secondary">Call Now</a>
       </div>
       <div class="hero-badges" aria-label="Trust badges">
         <span class="badge-chip">Same-Day Service</span>
         <span class="badge-chip">Warranty Included</span>
         <span class="badge-chip">Local Business</span>
       </div>
+    </div>
+  </section>
+
+  <section class="container mx-auto px-4 home-section" data-reveal>
+    <h2 class="home-section-title">Inside Revive & Thrive</h2>
+    <div class="gallery-grid">
+      <figure class="gallery-card">
+        <img src="{{ s3_url('gallery/before-after.jpg') }}" alt="Before and after repair comparison" loading="lazy" />
+      </figure>
+      <figure class="gallery-card">
+        <img src="{{ s3_url('gallery/customer-service.jpg') }}" alt="Customer service at Revive and Thrive Tech" loading="lazy" />
+      </figure>
     </div>
   </section>
 
@@ -43,21 +56,33 @@
 
   <section class="container mx-auto px-4 home-section" data-reveal>
     <h2 class="home-section-title">Popular Repairs</h2>
+    <p class="section-lead">High-demand repair services completed by certified technicians with fast turnaround.</p>
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-      <div class="p-6 bg-white dark:bg-gray-800 rounded-lg shadow">
-        <h3 class="text-lg font-semibold">Screen Repair</h3>
-        <p class="mt-2 text-sm text-gray-600 dark:text-gray-300">Cracked screen replacement for iPhone, Samsung, and Android devices.</p>
-        <a class="mt-4 inline-block text-indigo-600" href="/book">Book Now →</a>
-      </div>
-      <div class="p-6 bg-white dark:bg-gray-800 rounded-lg shadow">
-        <h3 class="text-lg font-semibold">Battery Replacement</h3>
-        <p class="mt-2 text-sm text-gray-600 dark:text-gray-300">Restore battery life and performance with a fast replacement.</p>
-        <a class="mt-4 inline-block text-indigo-600" href="/book">Book Now →</a>
-      </div>
-      <div class="p-6 bg-white dark:bg-gray-800 rounded-lg shadow">
-        <h3 class="text-lg font-semibold">Water Damage</h3>
-        <p class="mt-2 text-sm text-gray-600 dark:text-gray-300">Diagnostics and cleaning for liquid-damaged devices.</p>
-        <a class="mt-4 inline-block text-indigo-600" href="/book">Book Now →</a>
+      <article class="repair-card">
+        <h3>Screen Repair</h3>
+        <p>Cracked screen replacement for iPhone, Samsung, and Android devices.</p>
+        <a href="/book">Book Now →</a>
+      </article>
+      <article class="repair-card">
+        <h3>Battery Replacement</h3>
+        <p>Restore battery life and performance with a fast replacement.</p>
+        <a href="/book">Book Now →</a>
+      </article>
+      <article class="repair-card">
+        <h3>Water Damage</h3>
+        <p>Diagnostics and cleaning for liquid-damaged devices.</p>
+        <a href="/book">Book Now →</a>
+      </article>
+    </div>
+  </section>
+
+  <section class="container mx-auto px-4 home-section" data-reveal>
+    <div class="final-cta">
+      <h2>Ready to fix your device today?</h2>
+      <p>Book online in minutes or call us now for immediate repair support in Arlington.</p>
+      <div class="final-cta-actions">
+        <a href="/book" class="button button-primary">Book Repair</a>
+        <a href="tel:+13475539089" class="button button-contrast">Call Now</a>
       </div>
     </div>
   </section>

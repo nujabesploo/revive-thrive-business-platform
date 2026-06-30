@@ -798,12 +798,12 @@ def api_inventory_item(id):
 
 @app.errorhandler(404)
 def page_not_found(error):
-    return "<h1>404 - Page Not Found</h1><p>The page you requested does not exist.</p>", 404
+    return render_template("404.html"), 404
 
 
 @app.errorhandler(500)
 def server_error(error):
-    return "<h1>500 - Server Error</h1><p>Something went wrong on the server.</p>", 500
+    return render_template("500.html"), 500
 
 
 def find_available_port(host, preferred_port=5000, max_tries=20):

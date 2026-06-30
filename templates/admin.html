@@ -3,7 +3,7 @@
 {% block title %}Admin Dashboard | Revive & Thrive Tech{% endblock %}
 
 {% block content %}
-  <section class="section">
+  <section class="section" data-reveal>
     <h1>Admin dashboard</h1>
     <div class="stats">
       <div class="stat-card">
@@ -24,8 +24,9 @@
       </div>
     </div>
 
-    <div class="section">
-      <table>
+    <div class="section" data-reveal>
+      <div class="table-responsive">
+      <table class="table">
         <thead>
           <tr>
             <th>Ticket</th>
@@ -48,17 +49,26 @@
               <td>{{ booking.phone_number }}</td>
               <td>{{ booking.device_model }}</td>
               <td>{{ booking.service_needed }}</td>
-              <td><span class="tag tag-{{ booking.status|lower().replace(' ', '') }}">{{ booking.status }}</span></td>
+              <td>
+                {% if booking.status in ['Completed', 'Delivered'] %}
+                  <span class="tag tag-success">{{ booking.status }}</span>
+                {% elif booking.status in ['New Request', 'Received', 'Diagnosing', 'In Repair'] %}
+                  <span class="tag tag-warning">{{ booking.status }}</span>
+                {% else %}
+                  <span class="tag tag-danger">{{ booking.status }}</span>
+                {% endif %}
+              </td>
               <td>${{ '%.2f' | format(booking.repair_cost or 0) }}</td>
               <td><a class="button" href="/ticket/{{ booking.id }}">Manage</a></td>
             </tr>
           {% else %}
             <tr>
-              <td colspan="8">No booking requests yet.</td>
+              <td colspan="9">No booking requests yet.</td>
             </tr>
           {% endfor %}
         </tbody>
       </table>
+      </div>
     </div>
   </section>
 {% endblock %}

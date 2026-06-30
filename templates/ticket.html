@@ -1,36 +1,10 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Manage Ticket {{ booking.ticket_code or ('#' ~ booking.id) }} | Revive & Thrive Tech</title>
-  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
-</head>
-<body>
-<header>
-  <div class="container">
-    <nav>
-      <div class="brand">Revive <span>&</span> Thrive Tech</div>
-      <div class="nav-links">
-        <a href="/">Home</a>
-        <a href="/services">Services</a>
-        <a href="/book">Book Repair</a>
-        <a href="/status">Track Repair</a>
-      </div>
-    </nav>
-  </div>
-</header>
+{% extends 'base.html' %}
 
-<main>
-  <section class="section container">
+{% block title %}Manage Ticket {{ booking.ticket_code or ('#' ~ booking.id) }} | Revive & Thrive Tech{% endblock %}
+
+{% block content %}
+  <section class="section" data-reveal>
     <h1>Repair ticket {{ booking.ticket_code or ('#' ~ booking.id) }}</h1>
-    {% with messages = get_flashed_messages(with_categories=true) %}
-      {% if messages %}
-        {% for category, message in messages %}
-          <div class="alert {{ category }}">{{ message }}</div>
-        {% endfor %}
-      {% endif %}
-    {% endwith %}
 
     <div class="card">
       <p><strong>Ticket:</strong> {{ booking.ticket_code or '' }}</p>
@@ -60,15 +34,10 @@
         <label for="notes">Repair Notes</label>
         <textarea id="notes" name="notes" placeholder="Repair Notes">{{ booking.notes or '' }}</textarea>
       </div>
-      <button type="submit" class="button">Update Ticket</button>
+      <div class="form-actions">
+        <button type="submit" class="button button-primary">Update Ticket</button>
+        <a class="button button-secondary" href="/admin">Back to admin</a>
+      </div>
     </form>
-
-    <p><a href="/admin">Back to admin</a></p>
   </section>
-</main>
-
-<footer>
-  <div class="container">© 2026 Revive & Thrive Tech</div>
-</footer>
-</body>
-</html>
+{% endblock %}
