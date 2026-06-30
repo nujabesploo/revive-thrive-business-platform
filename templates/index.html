@@ -3,23 +3,15 @@
 {% block title %}Home | Revive & Thrive Tech{% endblock %}
 
 {% block content %}
-  <section class="home-hero" data-reveal>
-    <div class="container mx-auto px-4 py-16 text-center home-hero-inner">
-      <div class="hero-badge hero-badge-left">Precise work.</div>
-      <div class="hero-badge hero-badge-right">Local experts.</div>
-      <img src="{{ s3_url('hero/hero-repair.jpg') }}" alt="Repair service" class="hero-image mx-auto mb-8" onerror="this.style.display='none';" />
-      <p class="home-kicker">Arlington, TX • Phone Repair</p>
-      <h1 class="home-hero-title">Fast, Reliable Phone Repair You Can Trust</h1>
-      <p class="home-hero-subtitle">iPhone • Samsung • Tablet Repair • Screen Repair • Battery Replacement</p>
-      <div class="home-hero-actions">
-        <a href="/book" class="button button-primary">Book a Repair</a>
-        <a href="tel:+13475539089" class="button button-contrast">Call Now</a>
-      </div>
-      <div class="hero-trust-list" aria-label="Trust indicators">
-        <span>Same-day turnaround</span>
-        <span>Transparent diagnostics</span>
-        <span>Warranty-backed repairs</span>
-      </div>
+  <section class="hero" data-reveal>
+    <video autoplay muted loop playsinline>
+      <source src="{{ url_for('static', filename='video/hero-commercial.mp4') }}" type="video/mp4">
+    </video>
+
+    <div class="hero-overlay">
+      <h1>Fast, Reliable Phone Repair</h1>
+      <p>Same Day Repairs • Screen Replacement • Water Damage</p>
+      <a href="/book" class="btn">Book Repair</a>
     </div>
   </section>
 
