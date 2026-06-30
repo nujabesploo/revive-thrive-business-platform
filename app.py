@@ -21,6 +21,23 @@ TELEGRAM_CHAT_ID = os.getenv("TELEGRAM_CHAT_ID")
 
 app.config["SECRET_KEY"] = os.environ.get("FLASK_SECRET_KEY", "revive-thrive-secret")
 app.config["DATABASE"] = os.path.join(os.path.dirname(__file__), "database.db")
+S3_BASE_URL = os.getenv("S3_BASE_URL", "").strip().rstrip("/")
+
+
+def s3_url(path):
+    clean_path = (path or "").lstrip("/")
+    if not clean_path:
+        return ""
+    if S3_BASE_URL:
+        return f"{S3_BASE_URL}/{clean_path}"
+    return url_for("static", filename=clean_path)
+
+
+@app.context_processor
+def inject_template_helpers():
+    return {"s3_url": s3_url}
+
+
 def send_email(to_email, subject, body):
     if not MAIL_USERNAME or not MAIL_PASSWORD:
         print("Email credentials missing.")
