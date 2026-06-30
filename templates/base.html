@@ -23,10 +23,17 @@
       <a href="/" class="nav-link">Home</a>
       <a href="/services" class="nav-link">Services</a>
       <a href="/book" class="nav-link">Book Repair</a>
+      <a href="/contact" class="nav-link">Contact</a>
+      {% if is_admin_authenticated %}
       <a href="/status" class="nav-link">Track Repair</a>
       <a href="/inventory" class="nav-link">Inventory</a>
-      <a href="/contact" class="nav-link">Contact</a>
       <a href="/admin" class="nav-link">Admin</a>
+      <form method="post" action="{{ url_for('admin_logout') }}" class="inline-logout-form">
+        <button type="submit" class="nav-link nav-link-button">Logout</button>
+      </form>
+      {% else %}
+      <a href="{{ url_for('admin_login') }}" class="nav-link">Admin Login</a>
+      {% endif %}
       <button id="dark-toggle" aria-label="Toggle dark mode" class="dark-toggle">🌙</button>
     </nav>
   </div>

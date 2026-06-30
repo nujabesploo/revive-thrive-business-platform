@@ -1,12 +1,14 @@
 import os
 import re
 import sqlite3
+import secrets
 from datetime import datetime, date
+from functools import wraps
 import smtplib
 import requests
 from email.message import EmailMessage
 from dotenv import load_dotenv
-from flask import Flask, render_template, request, redirect, url_for, flash, abort, jsonify
+from flask import Flask, render_template, request, redirect, url_for, flash, abort, jsonify, session
 
 app = Flask(__name__)
 load_dotenv()
@@ -18,6 +20,8 @@ MAIL_PASSWORD = os.getenv("MAIL_PASSWORD")
 
 TELEGRAM_BOT_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
 TELEGRAM_CHAT_ID = os.getenv("TELEGRAM_CHAT_ID")
+ADMIN_USERNAME = os.getenv("ADMIN_USERNAME", "admin")
+ADMIN_PASSWORD = os.getenv("ADMIN_PASSWORD", "change-me")
 
 app.config["SECRET_KEY"] = os.environ.get("FLASK_SECRET_KEY", "revive-thrive-secret")
 app.config["DATABASE"] = os.path.join(os.path.dirname(__file__), "database.db")
@@ -35,7 +39,27 @@ def s3_url(path):
 
 @app.context_processor
 def inject_template_helpers():
-    return {"s3_url": s3_url}
+    return {
+        "s3_url": s3_url,
+        "is_admin_authenticated": session.get("is_admin") is True,
+    }
+
+
+def admin_required(view_func):
+    @wraps(view_func)
+    def wrapped_view(*args, **kwargs):
+        if session.get("is_admin") is not True:
+            flash("Please sign in as admin to access this page.", "error")
+            return redirect(url_for("admin_login", next=request.path))
+        return view_func(*args, **kwargs)
+
+    return wrapped_view
+
+
+def _safe_next_path(target):
+    if target and target.startswith("/") and not target.startswith("//"):
+        return target
+    return url_for("admin")
 
 
 def send_email(to_email, subject, body):
@@ -352,7 +376,40 @@ def success():
     return render_template("success.html")
 
 
+@app.route("/admin/login", methods=["GET", "POST"])
+def admin_login():
+    next_path = _safe_next_path(request.args.get("next"))
+
+    if request.method == "POST":
+        username = request.form.get("username", "").strip()
+        password = request.form.get("password", "")
+        posted_next = _safe_next_path(request.form.get("next"))
+
+        valid_user = secrets.compare_digest(username, ADMIN_USERNAME)
+        valid_pass = secrets.compare_digest(password, ADMIN_PASSWORD)
+
+        if valid_user and valid_pass:
+            session["is_admin"] = True
+            session["admin_username"] = username
+            flash("Admin login successful.", "success")
+            return redirect(posted_next)
+
+        flash("Invalid admin credentials.", "error")
+        return render_template("admin_login.html", next_path=posted_next)
+
+    return render_template("admin_login.html", next_path=next_path)
+
+
+@app.route("/admin/logout", methods=["POST"])
+def admin_logout():
+    session.pop("is_admin", None)
+    session.pop("admin_username", None)
+    flash("You have been signed out.", "success")
+    return redirect(url_for("home"))
+
+
 @app.route("/admin")
+@admin_required
 def admin():
     conn = get_db_connection()
     cursor = conn.cursor()
@@ -415,6 +472,7 @@ def contact():
 
 
 @app.route("/ticket/<int:id>", methods=["GET", "POST"])
+@admin_required
 def ticket(id):
     conn = get_db_connection()
     cursor = conn.cursor()
@@ -462,6 +520,7 @@ def ticket(id):
 
 
 @app.route("/status", methods=["GET", "POST"])
+@admin_required
 def status():
     booking = None
 
@@ -492,6 +551,7 @@ def status():
 
 
 @app.route("/api/bookings")
+@admin_required
 def api_bookings():
     conn = get_db_connection()
     cursor = conn.cursor()
@@ -507,6 +567,7 @@ def api_bookings():
 
 # Inventory Management Routes
 @app.route("/inventory")
+@admin_required
 def inventory():
     search_query = request.args.get("search", "").strip()
     category_filter = request.args.get("category", "").strip()
@@ -562,6 +623,7 @@ def inventory():
 
 
 @app.route("/inventory/add", methods=["GET", "POST"])
+@admin_required
 def inventory_add():
     if request.method == "POST":
         form_data = {
@@ -620,6 +682,7 @@ def inventory_add():
 
 
 @app.route("/inventory/edit/<int:id>", methods=["GET", "POST"])
+@admin_required
 def inventory_edit(id):
     conn = get_db_connection()
     cursor = conn.cursor()
@@ -689,6 +752,7 @@ def inventory_edit(id):
 
 
 @app.route("/inventory/delete/<int:id>", methods=["POST"])
+@admin_required
 def inventory_delete(id):
     conn = get_db_connection()
     cursor = conn.cursor()
@@ -702,6 +766,7 @@ def inventory_delete(id):
 
 
 @app.route("/api/inventory")
+@admin_required
 def api_inventory():
     conn = get_db_connection()
     cursor = conn.cursor()
@@ -715,6 +780,7 @@ def api_inventory():
 
 
 @app.route("/api/inventory/<int:id>")
+@admin_required
 def api_inventory_item(id):
     conn = get_db_connection()
     cursor = conn.cursor()
