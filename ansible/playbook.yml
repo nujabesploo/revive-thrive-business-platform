@@ -1,0 +1,138 @@
+---
+# Beginner-friendly playbook to configure and deploy the Flask app on Ubuntu EC2.
+- name: Deploy Revive & Thrive Flask app
+  hosts: web
+  become: true
+
+  vars:
+    # Easy-to-edit variables for your environment.
+    app_user: ubuntu
+    app_dir: /home/ubuntu/projects/revive-thrive-business-platform
+    repo_url: https://github.com/nujabesploo/revive-thrive-business-platform.git
+    repo_branch: main
+    venv_dir: "{{ app_dir }}/venv"
+    service_name: revive-thrive
+    gunicorn_bind: 127.0.0.1:5000
+    gunicorn_workers: 3
+    server_name: "revivethrivetech.com www.revivethrivetech.com"
+
+  tasks:
+    - name: Update apt cache and upgrade installed packages
+      ansible.builtin.apt:
+        update_cache: true
+        upgrade: dist
+
+    - name: Install required OS packages
+      ansible.builtin.apt:
+        name:
+          - git
+          - python3
+          - python3-venv
+          - python3-pip
+          - nginx
+        state: present
+
+    - name: Ensure app parent directory exists
+      ansible.builtin.file:
+        path: "{{ app_dir | dirname }}"
+        state: directory
+        owner: "{{ app_user }}"
+        group: "{{ app_user }}"
+        mode: "0755"
+
+    - name: Clone or pull application repository
+      ansible.builtin.git:
+        repo: "{{ repo_url }}"
+        dest: "{{ app_dir }}"
+        version: "{{ repo_branch }}"
+        update: true
+      become_user: "{{ app_user }}"
+
+    - name: Create Python virtual environment
+      ansible.builtin.command: "python3 -m venv {{ venv_dir }}"
+      args:
+        creates: "{{ venv_dir }}/bin/activate"
+
+    - name: Install Python requirements
+      ansible.builtin.pip:
+        requirements: "{{ app_dir }}/requirements.txt"
+        virtualenv: "{{ venv_dir }}"
+
+    - name: Create systemd unit for Gunicorn
+      ansible.builtin.copy:
+        dest: "/etc/systemd/system/{{ service_name }}.service"
+        mode: "0644"
+        content: |
+          [Unit]
+          Description=Revive Thrive Flask App
+          After=network.target
+
+          [Service]
+          User={{ app_user }}
+          Group=www-data
+          WorkingDirectory={{ app_dir }}
+          Environment="PATH={{ venv_dir }}/bin"
+          EnvironmentFile=-{{ app_dir }}/.env
+          ExecStart={{ venv_dir }}/bin/gunicorn --workers {{ gunicorn_workers }} --bind {{ gunicorn_bind }} app:app
+          Restart=always
+          RestartSec=5
+
+          [Install]
+          WantedBy=multi-user.target
+
+    - name: Create Nginx reverse proxy config
+      ansible.builtin.copy:
+        dest: /etc/nginx/sites-available/revive-thrive
+        mode: "0644"
+        content: |
+          server {
+              listen 80;
+              server_name {{ server_name }};
+
+              location / {
+                  proxy_pass http://{{ gunicorn_bind }};
+                  proxy_set_header Host $host;
+                  proxy_set_header X-Real-IP $remote_addr;
+                  proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+                  proxy_set_header X-Forwarded-Proto $scheme;
+                  proxy_connect_timeout 60s;
+                  proxy_read_timeout 60s;
+                  proxy_send_timeout 60s;
+              }
+          }
+
+    - name: Enable Nginx site
+      ansible.builtin.file:
+        src: /etc/nginx/sites-available/revive-thrive
+        dest: /etc/nginx/sites-enabled/revive-thrive
+        state: link
+
+    - name: Remove default Nginx site
+      ansible.builtin.file:
+        path: /etc/nginx/sites-enabled/default
+        state: absent
+
+    - name: Validate Nginx config
+      ansible.builtin.command: nginx -t
+      changed_when: false
+
+    - name: Reload systemd daemon
+      ansible.builtin.systemd:
+        daemon_reload: true
+
+    - name: Restart Gunicorn service
+      ansible.builtin.systemd:
+        name: "{{ service_name }}"
+        state: restarted
+        enabled: true
+
+    - name: Restart Nginx service
+      ansible.builtin.systemd:
+        name: nginx
+        state: restarted
+        enabled: true
+
+    - name: Verify app health endpoint from server
+      ansible.builtin.uri:
+        url: http://127.0.0.1/health
+        status_code: 200
