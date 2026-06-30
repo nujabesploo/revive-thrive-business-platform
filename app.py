@@ -85,17 +85,24 @@ def send_email(to_email, subject, body):
 def send_telegram(message):
     if not TELEGRAM_BOT_TOKEN or not TELEGRAM_CHAT_ID:
         print("Telegram credentials missing.")
-        return
+        return False
 
     url = f"https://api.telegram.org/bot{TELEGRAM_BOT_TOKEN}/sendMessage"
     try:
-        requests.post(url, data={
+        response = requests.post(url, data={
             "chat_id": TELEGRAM_CHAT_ID,
             "text": message,
-        })
+        }, timeout=12)
+        response.raise_for_status()
+        payload = response.json()
+        if not payload.get("ok"):
+            print(f"Telegram API returned error: {payload}")
+            return False
         print("Telegram sent.")
+        return True
     except Exception as e:
         print(f"Telegram failed: {e}")
+        return False
 
 
 STATUS_OPTIONS = [
@@ -314,6 +321,7 @@ def book():
     Ticket: {ticket_code}
     Customer: {form_data.get("customer_name")}
     Phone: {form_data.get("phone_number")}
+    Email: {form_data.get("email")}
     Device: {form_data.get("device_type")} {form_data.get("device_model")}
     Service: {form_data.get("service_needed")}
     Issue: {form_data.get("issue_description")}
@@ -325,9 +333,9 @@ def book():
         customer_message = f"""
     Hi {form_data.get("customer_name")},
 
-    Thank you for booking with Revive & Thrive Tech.
+    Thanks for choosing Revive & Thrive Tech.
 
-    Your repair request has been received.
+    Your repair request is confirmed and already in our queue.
 
     Ticket: {ticket_code}
     Device: {form_data.get("device_type")} {form_data.get("device_model")}
@@ -335,14 +343,17 @@ def book():
 
     Track your repair: https://revivethrivetech.com/status
 
-    We will contact you shortly to confirm your appointment.
+    We will contact you shortly with the next update so your experience feels smooth from start to finish.
+
+    We appreciate your trust and look forward to serving you.
 
     - Revive & Thrive Tech
     """
 
         # Notify business via Telegram and email
         try:
-            send_telegram(business_message)
+            if not send_telegram(business_message):
+                print("Business telegram notify did not confirm delivery.")
         except Exception as e:
             print(f"Business telegram notify failed: {e}")
 
@@ -370,7 +381,7 @@ def book():
 
         # (No SMS here — using email and Telegram notifications)
 
-        flash("Repair request submitted successfully. We will contact you soon.", "success")
+        flash("Repair request submitted successfully. Check your email for confirmation and next steps.", "success")
         return redirect(url_for("success"))
 
     return render_template("book.html", form={})
