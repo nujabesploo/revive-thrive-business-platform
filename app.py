@@ -28,6 +28,9 @@ app.config["SECRET_KEY"] = os.environ.get("FLASK_SECRET_KEY", "revive-thrive-sec
 init_db_app(app)
 init_media_app(app)
 
+with app.app_context():
+    init_db()
+
 
 @app.context_processor
 def inject_template_helpers():

@@ -5,8 +5,8 @@ This guide covers deploying the Flask app to an Ubuntu EC2 instance using Gunico
 
 ## Assumptions
 - EC2 instance user: `ubuntu`
-- Project path: `/home/ubuntu/revive-thrive-platform`
-- Virtualenv path: `/home/ubuntu/revive-thrive-platform/venv`
+- Project path: `/home/ubuntu/projects/revive-thrive-business-platform`
+- Virtualenv path: `/home/ubuntu/projects/revive-thrive-business-platform/venv`
 - App entrypoint: `app:app`
 - Docker already added to repo, but this guide uses EC2 host deployment.
 
@@ -23,7 +23,7 @@ ssh -i ~/Downloads/revive-thrive-key.pem ubuntu@3.89.29.94
 2. Go to the project directory:
 
 ```bash
-cd /home/ubuntu/revive-thrive-platform
+cd /home/ubuntu/projects/revive-thrive-business-platform
 ```
 
 3. Activate the virtual environment and test Gunicorn:
@@ -54,9 +54,12 @@ After=network.target
 [Service]
 User=ubuntu
 Group=www-data
-WorkingDirectory=/home/ubuntu/revive-thrive-platform
-Environment="PATH=/home/ubuntu/revive-thrive-platform/venv/bin"
-ExecStart=/home/ubuntu/revive-thrive-platform/venv/bin/gunicorn --workers 3 --bind 127.0.0.1:5000 app:app
+WorkingDirectory=/home/ubuntu/projects/revive-thrive-business-platform
+Environment="PATH=/home/ubuntu/projects/revive-thrive-business-platform/venv/bin"
+EnvironmentFile=-/home/ubuntu/projects/revive-thrive-business-platform/.env
+ExecStart=/home/ubuntu/projects/revive-thrive-business-platform/venv/bin/gunicorn --workers 3 --bind 127.0.0.1:5000 app:app
+Restart=always
+RestartSec=5
 
 [Install]
 WantedBy=multi-user.target

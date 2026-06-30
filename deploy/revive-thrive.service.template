@@ -5,9 +5,12 @@ After=network.target
 [Service]
 User=ubuntu
 Group=www-data
-WorkingDirectory=/home/ubuntu/revive-thrive-platform
-Environment="PATH=/home/ubuntu/revive-thrive-platform/venv/bin"
-ExecStart=/home/ubuntu/revive-thrive-platform/venv/bin/gunicorn --workers 3 --bind 127.0.0.1:5000 app:app
+WorkingDirectory=/home/ubuntu/projects/revive-thrive-business-platform
+Environment="PATH=/home/ubuntu/projects/revive-thrive-business-platform/venv/bin"
+EnvironmentFile=-/home/ubuntu/projects/revive-thrive-business-platform/.env
+ExecStart=/home/ubuntu/projects/revive-thrive-business-platform/venv/bin/gunicorn --workers 3 --bind 127.0.0.1:5000 app:app
+Restart=always
+RestartSec=5
 
 [Install]
 WantedBy=multi-user.target

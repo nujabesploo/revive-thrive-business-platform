@@ -44,7 +44,7 @@ MAIL_PASSWORD=your-smtp-password
 TELEGRAM_BOT_TOKEN=...
 TELEGRAM_CHAT_ID=...
 
-S3_BASE_URL=https://your-cloudfront-or-s3-base-url
+MEDIA_BASE_URL=https://your-cloudfront-or-s3-base-url
 
 ADMIN_USERNAME=admin
 ADMIN_PASSWORD=change-this-password

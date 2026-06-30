@@ -5,7 +5,7 @@
 
 set -euo pipefail
 
-PROJECT_DIR="/home/ubuntu/revive-thrive-platform"
+PROJECT_DIR="/home/ubuntu/projects/revive-thrive-business-platform"
 VENV_DIR="$PROJECT_DIR/venv"
 SERVICE_FILE="/etc/systemd/system/revive-thrive.service"
 NGINX_CONF="/etc/nginx/sites-available/revive-thrive"
@@ -18,7 +18,7 @@ sudo apt install -y python3 python3-venv python3-pip nginx git curl
 
 # 2. Ensure project exists
 if [ ! -d "$PROJECT_DIR" ]; then
-  echo "Project directory $PROJECT_DIR does not exist. Create it and upload files first."
+  echo "Project directory $PROJECT_DIR does not exist. Clone the repository first."
   exit 1
 fi
 
@@ -41,9 +41,12 @@ After=network.target
 [Service]
 User=ubuntu
 Group=www-data
-WorkingDirectory=/home/ubuntu/revive-thrive-platform
-Environment="PATH=/home/ubuntu/revive-thrive-platform/venv/bin"
-ExecStart=/home/ubuntu/revive-thrive-platform/venv/bin/gunicorn --workers 3 --bind 127.0.0.1:5000 app:app
+WorkingDirectory=/home/ubuntu/projects/revive-thrive-business-platform
+Environment="PATH=/home/ubuntu/projects/revive-thrive-business-platform/venv/bin"
+EnvironmentFile=-/home/ubuntu/projects/revive-thrive-business-platform/.env
+ExecStart=/home/ubuntu/projects/revive-thrive-business-platform/venv/bin/gunicorn --workers 3 --bind 127.0.0.1:5000 app:app
+Restart=always
+RestartSec=5
 
 [Install]
 WantedBy=multi-user.target
@@ -65,6 +68,9 @@ server {
         proxy_set_header X-Real-IP \$remote_addr;
         proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for;
         proxy_set_header X-Forwarded-Proto \$scheme;
+      proxy_connect_timeout 60s;
+      proxy_read_timeout 60s;
+      proxy_send_timeout 60s;
     }
 }
 EOF
@@ -73,6 +79,18 @@ sudo ln -sf "$NGINX_CONF" "$NGINX_ENABLED"
 sudo rm -f /etc/nginx/sites-enabled/default
 sudo nginx -t
 sudo systemctl restart nginx
+
+echo "Waiting for gunicorn to accept connections..."
+for i in {1..20}; do
+  if curl -fsS http://127.0.0.1:5000/health >/dev/null; then
+    echo "Gunicorn health check passed"
+    break
+  fi
+  sleep 1
+done
+
+curl -fsS http://127.0.0.1/health >/dev/null
+echo "Nginx reverse proxy health check passed"
 
 # 6. Status
 sudo systemctl status revive-thrive --no-pager
