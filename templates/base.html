@@ -4,27 +4,35 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>{% block title %}Revive & Thrive Tech{% endblock %}</title>
+  <!-- Tailwind CDN for rapid UI/UX prototyping -->
+  <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+  <script defer src="{{ url_for('static', filename='site.js') }}"></script>
 </head>
 <body>
-<header>
-  <div class="container">
-    <nav>
-      <div class="brand">Revive <span>&</span> Thrive Tech</div>
-      <div class="nav-links">
-        <a href="/">Home</a>
-        <a href="/services">Services</a>
-        <a href="/book">Book Repair</a>
-        <a href="/status">Track Repair</a>
-        <a href="/inventory">Inventory</a>
-        <a href="/contact">Contact</a>
-        <a href="/admin">Admin</a>
+<a class="skip-link" href="#main-content">Skip to content</a>
+<header class="bg-white dark:bg-gray-900 shadow">
+  <div class="site-header container mx-auto px-4 py-3">
+    <div class="site-brand-wrap flex items-center gap-3">
+      <div class="brand">
+        <span class="brand-logo">R</span>
+        <span class="brand-text">Revive <span> & </span> Thrive Tech</span>
       </div>
+    </div>
+    <nav class="site-nav flex flex-wrap gap-3 text-sm text-gray-700 dark:text-gray-200 justify-center md:justify-end" aria-label="Primary navigation">
+      <a href="/" class="nav-link">Home</a>
+      <a href="/services" class="nav-link">Services</a>
+      <a href="/book" class="nav-link">Book Repair</a>
+      <a href="/status" class="nav-link">Track Repair</a>
+      <a href="/inventory" class="nav-link">Inventory</a>
+      <a href="/contact" class="nav-link">Contact</a>
+      <a href="/admin" class="nav-link">Admin</a>
+      <button id="dark-toggle" aria-label="Toggle dark mode" class="dark-toggle">🌙</button>
     </nav>
   </div>
 </header>
 
-<main>
+<main id="main-content">
   <div class="container">
     {% with messages = get_flashed_messages(with_categories=true) %}
       {% if messages %}
@@ -39,8 +47,9 @@
 </main>
 
 <footer>
-  <div class="container">
-    © 2026 Revive & Thrive Tech
+  <div class="container footer-inner">
+    <p class="footer-brand">Revive & Thrive Tech</p>
+    <p class="footer-copy">© 2026 Revive & Thrive Tech. Professional device repairs in Arlington, TX.</p>
   </div>
 </footer>
 </body>
