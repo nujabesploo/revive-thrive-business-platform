@@ -8,11 +8,14 @@ import requests
 from email.message import EmailMessage
 from dotenv import load_dotenv
 from flask import Flask, render_template, request, redirect, url_for, flash, abort, jsonify, session
+from config import Config
 from database import get_db_connection, init_db, init_db_app
 from media import init_media_app, media_url
 
 app = Flask(__name__)
 load_dotenv()
+app.config.from_object(Config)
+Config.init_app(app)
 
 # Notification / credentials
 BUSINESS_EMAIL = os.getenv("BUSINESS_EMAIL")
@@ -24,7 +27,6 @@ TELEGRAM_CHAT_ID = os.getenv("TELEGRAM_CHAT_ID")
 ADMIN_USERNAME = os.getenv("ADMIN_USERNAME", "admin")
 ADMIN_PASSWORD = os.getenv("ADMIN_PASSWORD", "change-me")
 
-app.config["SECRET_KEY"] = os.environ.get("FLASK_SECRET_KEY", "revive-thrive-secret")
 init_db_app(app)
 init_media_app(app)
 

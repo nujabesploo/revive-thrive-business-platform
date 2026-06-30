@@ -1,4 +1,3 @@
-import os
 from flask import current_app, url_for
 
 
@@ -34,5 +33,7 @@ def init_media_app(app) -> None:
     templates keep calling media_url(path), while infrastructure can switch media
     delivery from local static serving to CDN edge delivery by changing env config.
     """
-    app.config["MEDIA_BASE_URL"] = _normalize_base_url(os.getenv("MEDIA_BASE_URL", ""))
+    # Pull from centralized app config so environment handling is managed in one
+    # place and remains consistent across EC2, Docker, and Kubernetes.
+    app.config["MEDIA_BASE_URL"] = _normalize_base_url(app.config.get("MEDIA_BASE_URL", ""))
     app.jinja_env.globals["media_url"] = media_url
