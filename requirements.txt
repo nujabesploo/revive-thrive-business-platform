@@ -16,4 +16,4 @@ SQLAlchemy==2.0.43
 urllib3==2.6.3
 Werkzeug==3.1.8
 zipp==3.23.1
-psycopg2-binary==2.9.10
+pg8000==1.31.2

@@ -19,8 +19,15 @@ def resolve_database_url() -> str:
     database_url = os.getenv("DATABASE_URL", "").strip()
     if not database_url:
         return _default_sqlite_url()
+
+    # Normalize legacy scheme to SQLAlchemy PostgreSQL URL format.
     if database_url.startswith("postgres://"):
-        return database_url.replace("postgres://", "postgresql://", 1)
+        database_url = database_url.replace("postgres://", "postgresql://", 1)
+
+    # Use pg8000 explicitly to avoid binary driver build issues on newer Python.
+    if database_url.startswith("postgresql://"):
+        return database_url.replace("postgresql://", "postgresql+pg8000://", 1)
+
     return database_url
 
 
