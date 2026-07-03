@@ -22,7 +22,7 @@ MEDIA_ASSETS = {
         "screen_repair": "services/screen-repair.png",
         "battery_repair": "services/battery-repair.png",
         "water_damage": "services/water-damage.png",
-        "firestick_service": "services/firestick-service.png",
+        "charging_port": "services/charging-port.png",
     },
     "audio": {
         "anthem": "audio/anthem.mp3",
