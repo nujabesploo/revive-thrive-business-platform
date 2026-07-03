@@ -327,7 +327,8 @@ main {
 
 .hero {
   position: relative;
-  min-height: clamp(320px, 58vw, 620px);
+  height: clamp(420px, 72vh, 640px);
+  min-height: 420px;
   border-radius: var(--radius-xl);
   overflow: hidden;
   margin: 0.75rem 0 2.2rem;
@@ -342,8 +343,8 @@ main {
 .hero video {
   width: 100%;
   height: 100%;
-  min-height: inherit;
   object-fit: cover;
+  object-position: center 28%;
   display: block;
   transform: scale(1.02);
   transform-origin: center;
@@ -353,8 +354,8 @@ main {
   display: none;
   width: 100%;
   height: 100%;
-  min-height: inherit;
   object-fit: cover;
+  object-position: center 28%;
 }
 
 .hero::after {
@@ -556,7 +557,9 @@ main {
 
 .before-after-card img {
   width: 100%;
-  height: clamp(220px, 34vw, 320px);
+  aspect-ratio: 4 / 3;
+  height: auto;
+  max-height: 340px;
   object-fit: cover;
   object-position: center 24%;
   border-radius: 12px;
@@ -591,7 +594,8 @@ main {
 
 .gallery-card img {
   width: 100%;
-  height: clamp(230px, 34vw, 360px);
+  aspect-ratio: 4 / 3;
+  height: auto;
   object-fit: cover;
   object-position: center 26%;
   display: block;
@@ -1352,7 +1356,8 @@ footer p {
   }
 
   .hero {
-    min-height: 360px;
+    height: clamp(340px, 58vh, 500px);
+    min-height: 340px;
     border-radius: 14px;
   }
 
@@ -1381,7 +1386,7 @@ footer p {
   }
 
   .gallery-card img {
-    height: clamp(210px, 54vw, 300px);
+    aspect-ratio: 5 / 4;
     object-position: center 18%;
   }
 
@@ -1493,6 +1498,7 @@ footer p {
   }
 
   .hero {
+    height: clamp(300px, 52vh, 420px);
     min-height: 300px;
   }
 
