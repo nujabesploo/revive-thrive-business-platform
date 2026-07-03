@@ -15,8 +15,8 @@ MEDIA_ASSETS = {
     "gallery": {
         "technician_repair": "gallery/technician-repair.png",
         "customer_service": "gallery/customer-service.png",
-        "before_after": "gallery/before-after.png",
-        "screen_repair": "gallery/screen-repair.png",
+        "before_after": "hero/before-after.png",
+        "screen_repair": "hero/screen-repair.png",
     },
     "services": {
         "screen_repair": "services/screen-repair.png",
