@@ -558,6 +558,7 @@ main {
   width: 100%;
   height: clamp(220px, 34vw, 320px);
   object-fit: cover;
+  object-position: center 24%;
   border-radius: 12px;
 }
 
@@ -592,7 +593,12 @@ main {
   width: 100%;
   height: clamp(230px, 34vw, 360px);
   object-fit: cover;
+  object-position: center 26%;
   display: block;
+}
+
+.gallery-grid .gallery-card:nth-child(-n+2) img {
+  object-position: center 20%;
 }
 
 /* ============================================
@@ -611,8 +617,9 @@ main {
 
 .cards .card img {
   width: 100%;
-  height: 170px;
+  height: clamp(180px, 24vw, 220px);
   object-fit: cover;
+  object-position: center 22%;
   border-radius: 10px;
   margin-bottom: 0.8rem;
   border: 1px solid #dbeafe;
@@ -1375,6 +1382,7 @@ footer p {
 
   .gallery-card img {
     height: clamp(210px, 54vw, 300px);
+    object-position: center 18%;
   }
 
   .nav-links {
