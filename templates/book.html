@@ -3,9 +3,14 @@
 {% block title %}Book Repair | Revive & Thrive Tech{% endblock %}
 
 {% block content %}
-  <section class="section" data-reveal>
+  <section class="section section-shell section-narrow" data-reveal>
     <h1>Book a repair appointment</h1>
     <p>Complete the form and our team will confirm your repair details shortly.</p>
+    <div class="trust-inline">
+      <span>Same-Day Availability</span>
+      <span>Warranty Included</span>
+      <span>No Hidden Fees</span>
+    </div>
 
     <form method="POST" class="form">
       <div class="field-group">
@@ -50,7 +55,7 @@
         <label for="preferred_date">Preferred Appointment Date</label>
         <input id="preferred_date" type="date" name="preferred_date" value="{{ form.get('preferred_date', '') }}" required />
       </div>
-      <button type="submit" class="button">Submit Booking Request</button>
+      <button type="submit" class="button button-primary">Submit Booking Request</button>
     </form>
   </section>
 {% endblock %}

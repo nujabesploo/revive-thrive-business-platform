@@ -3,9 +3,15 @@
 {% block title %}Services | Revive & Thrive Tech{% endblock %}
 
 {% block content %}
-<section class="section" data-reveal>
-  <h1>Repair services</h1>
-  <p>Select the repair service that fits your device issue.</p>
+<section class="section section-shell" data-reveal>
+  <div class="section-banner">
+    <h1>Repair Services Built for Speed</h1>
+    <p>Select the repair service that fits your device issue and reserve your priority slot in minutes.</p>
+    <div class="banner-actions">
+      <a class="button button-primary" href="/book">Start Booking</a>
+      <a class="button button-secondary" href="tel:+13476715335">Call (347) 671-5335</a>
+    </div>
+  </div>
   <div class="cards">
     <div class="card">
       <img src="{{ media_url(MEDIA_ASSETS['services']['screen_repair']) }}" alt="Screen repair service" loading="lazy" />
@@ -47,6 +53,15 @@
       <h3>Diagnostic Scan</h3>
       <p>Find the issue before committing to a repair.</p>
       <a class="button button-primary" href="/book">Book Now</a>
+    </div>
+  </div>
+
+  <div class="final-cta services-cta" data-reveal>
+    <h2>Need it fixed fast?</h2>
+    <p>Reserve now and our team will confirm the next available repair window right away.</p>
+    <div class="final-cta-actions">
+      <a class="button button-primary" href="/book">Book Repair</a>
+      <a class="button button-contrast" href="/contact">Ask a Question</a>
     </div>
   </div>
 </section>

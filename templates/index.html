@@ -3,19 +3,25 @@
 {% block title %}Home | Revive & Thrive Tech{% endblock %}
 
 {% block content %}
-  <section class="hero" data-reveal>
+  <section class="hero hero-metro" data-reveal>
     <video autoplay muted loop playsinline poster="{{ media_url(MEDIA_ASSETS['hero']['image']) }}" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
       <source src="{{ media_url(MEDIA_ASSETS['hero']['video']) }}" type="video/mp4">
     </video>
     <img class="hero-fallback" src="{{ media_url(MEDIA_ASSETS['hero']['image']) }}" alt="Repair technician at work" />
 
     <div class="hero-overlay">
+      <span class="hero-kicker">Arlington's Fast Lane Repair Lab</span>
       <img class="hero-logo" src="{{ media_url(MEDIA_ASSETS['logo']['primary']) }}" alt="Revive and Thrive Tech logo" />
       <h1>Fast, Reliable Device Repair in Arlington, TX</h1>
-      <p>Same-day repairs for phones, tablets, controllers, and tech devices.</p>
+      <p>Same-day repairs for phones, tablets, controllers, and tech devices with premium care and transparent updates.</p>
       <div class="hero-actions">
         <a href="/book" class="btn">Book Repair</a>
         <a href="tel:+13476715335" class="btn btn-secondary">Call Now</a>
+      </div>
+      <div class="hero-pulse-strip" aria-label="Quick proof points">
+        <span>Most Screen Repairs in 60 Minutes</span>
+        <span>Repair Warranty Included</span>
+        <span>Live Status Support</span>
       </div>
       <div class="hero-badges" aria-label="Trust badges">
         <span class="badge-chip">Same-Day Service</span>
@@ -37,6 +43,21 @@
       <figure class="gallery-card">
         <img src="{{ media_url(MEDIA_ASSETS['gallery']['before_after']) }}" alt="Before and after repair comparison" loading="lazy" />
       </figure>
+    </div>
+  </section>
+
+  <section class="container mx-auto px-4 home-section" data-reveal>
+    <h2 class="home-section-title">Screen Revival Proof</h2>
+    <p class="section-lead">Real transformations that show why customers trust us with their most-used devices.</p>
+    <div class="before-after-panel">
+      <article class="before-after-card">
+        <h3>Before</h3>
+        <img src="{{ media_url(MEDIA_ASSETS['gallery']['before_after']) }}" alt="Device screen before professional repair" loading="lazy" />
+      </article>
+      <article class="before-after-card">
+        <h3>After</h3>
+        <img src="{{ media_url(MEDIA_ASSETS['gallery']['screen_repair']) }}" alt="Device screen after professional repair" loading="lazy" />
+      </article>
     </div>
   </section>
 
@@ -93,7 +114,7 @@
   <section class="container mx-auto px-4 home-section" data-reveal>
     <div class="final-cta">
       <h2>Ready to fix your device today?</h2>
-      <p>Book online in minutes or call us now for immediate repair support in Arlington.</p>
+      <p>Book online in under two minutes and lock in priority repair support in Arlington today.</p>
       <div class="final-cta-actions">
         <a href="/book" class="button button-primary">Book Repair</a>
         <a href="tel:+13476715335" class="button button-contrast">Call Now</a>
