@@ -10,35 +10,54 @@
     <img class="hero-fallback" src="{{ media_url(MEDIA_ASSETS['hero']['image']) }}" alt="Repair technician at work" />
 
     <div class="hero-overlay">
-      <span class="hero-kicker">Arlington's Fast Lane Repair Lab</span>
-      <img class="hero-logo" src="{{ media_url(MEDIA_ASSETS['logo']['primary']) }}" alt="Revive and Thrive Tech logo" />
-      <h1>Fast, Reliable Device Repair in Arlington, TX</h1>
-      <p>Same-day repairs for phones, tablets, controllers, and tech devices with premium care and transparent updates.</p>
-      <div class="hero-actions">
-        <a href="/book" class="btn">Book Repair</a>
-        <a href="tel:+13476715335" class="btn btn-secondary">Call Now</a>
+      <div class="hero-content-shell">
+        <span class="hero-kicker">Arlington's Fast Lane Repair Lab</span>
+        <img class="hero-logo" src="{{ media_url(MEDIA_ASSETS['logo']['primary']) }}" alt="Revive and Thrive Tech logo" />
+        <h1>Fast, Reliable Device Repair in Arlington, TX</h1>
+        <p>Same-day repairs for phones, tablets, controllers, and tech devices with premium care and transparent updates.</p>
+        <div class="hero-actions">
+          <a href="/book" class="btn">Book Repair</a>
+          <a href="tel:+13476715335" class="btn btn-secondary">Call Now</a>
+        </div>
+        <div class="hero-pulse-strip" aria-label="Quick proof points">
+          <span>Most Screen Repairs in 60 Minutes</span>
+          <span>Repair Warranty Included</span>
+          <span>Live Status Support</span>
+        </div>
+        <div class="hero-badges" aria-label="Trust badges">
+          <span class="badge-chip">Same-Day Service</span>
+          <span class="badge-chip">Warranty Included</span>
+          <span class="badge-chip">Local Business</span>
+        </div>
       </div>
-      <div class="hero-pulse-strip" aria-label="Quick proof points">
-        <span>Most Screen Repairs in 60 Minutes</span>
-        <span>Repair Warranty Included</span>
-        <span>Live Status Support</span>
-      </div>
-      <div class="hero-badges" aria-label="Trust badges">
-        <span class="badge-chip">Same-Day Service</span>
-        <span class="badge-chip">Warranty Included</span>
-        <span class="badge-chip">Local Business</span>
+      <div class="hero-metrics" aria-label="Business highlights">
+        <article class="metric-card">
+          <p class="metric-value">60 min</p>
+          <p class="metric-label">Most screen repairs</p>
+        </article>
+        <article class="metric-card">
+          <p class="metric-value">7 days</p>
+          <p class="metric-label">Support availability</p>
+        </article>
+        <article class="metric-card">
+          <p class="metric-value">Local</p>
+          <p class="metric-label">Arlington technicians</p>
+        </article>
       </div>
     </div>
   </section>
 
   <section class="container mx-auto px-4 home-section" data-reveal>
     <h2 class="home-section-title">Inside Revive & Thrive</h2>
+    <p class="section-lead">Meet the team and service environment behind our rapid turnaround and careful device handling.</p>
     <div class="gallery-grid">
       <figure class="gallery-card">
         <img src="{{ media_url(MEDIA_ASSETS['gallery']['technician_repair']) }}" alt="Technician performing a device repair" loading="lazy" />
+        <figcaption>Precision diagnostics and repair workflows for every device class.</figcaption>
       </figure>
       <figure class="gallery-card">
         <img src="{{ media_url(MEDIA_ASSETS['gallery']['customer_service']) }}" alt="Customer service at Revive and Thrive Tech" loading="lazy" />
+        <figcaption>Friendly service desk updates from intake to final quality checks.</figcaption>
       </figure>
     </div>
   </section>
@@ -72,14 +91,17 @@
   <section class="container mx-auto px-4 home-section home-features" data-reveal>
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
       <div class="feature-card">
+        <span class="feature-tag">Fast</span>
         <h3>Same-Day Service</h3>
         <p>Quick turnaround for common repairs.</p>
       </div>
       <div class="feature-card">
+        <span class="feature-tag">Trusted</span>
         <h3>Real Diagnostics</h3>
         <p>We inspect your device before repair.</p>
       </div>
       <div class="feature-card">
+        <span class="feature-tag">Nearby</span>
         <h3>Local Business</h3>
         <p>Serving Arlington, TX and nearby areas.</p>
       </div>
@@ -93,22 +115,22 @@
       <article class="repair-card">
         <h3>Screen Repair</h3>
         <p>Cracked screen replacement for iPhone, Samsung, and Android devices.</p>
-        <a href="/book">Book Now →</a>
+        <a href="/book">Book Now -></a>
       </article>
       <article class="repair-card">
         <h3>Battery Replacement</h3>
         <p>Restore battery life and performance with a fast replacement.</p>
-        <a href="/book">Book Now →</a>
+        <a href="/book">Book Now -></a>
       </article>
       <article class="repair-card">
         <h3>Charging Port Repair</h3>
         <p>Fix loose, damaged, or non-responsive charging ports quickly.</p>
-        <a href="/book">Book Now →</a>
+        <a href="/book">Book Now -></a>
       </article>
       <article class="repair-card">
         <h3>Water Damage</h3>
         <p>Diagnostics and cleaning for liquid-damaged devices.</p>
-        <a href="/book">Book Now →</a>
+        <a href="/book">Book Now -></a>
       </article>
     </div>
   </section>
