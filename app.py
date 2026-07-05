@@ -437,7 +437,6 @@ def ticket(id):
 
 
 @app.route("/status", methods=["GET", "POST"])
-@admin_required
 def status():
     booking = None
 

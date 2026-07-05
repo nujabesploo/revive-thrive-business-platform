@@ -5,12 +5,12 @@
 @import url('https://fonts.googleapis.com/css2?family=Manrope:wght@500;600;700;800&family=Sora:wght@600;700;800&display=swap');
 
 :root {
-  --primary: #0f4db7;
-  --primary-dark: #072a68;
-  --primary-light: #2fa9ff;
-  --secondary: #22d3ee;
-  --secondary-dark: #0e7490;
-  --secondary-light: #67e8f9;
+  --primary: #b45309;
+  --primary-dark: #7c2d12;
+  --primary-light: #f59e0b;
+  --secondary: #d97706;
+  --secondary-dark: #9a3412;
+  --secondary-light: #fdba74;
   --danger: #ef4444;
   --danger-dark: #dc2626;
   --danger-light: #f87171;
@@ -30,11 +30,11 @@
   --gray-700: #374151;
   --gray-800: #1f2937;
   --gray-900: #111827;
-  --text: #0f172a;
-  --text-light: #475569;
-  --bg: #eef3fb;
+  --text: #2f261f;
+  --text-light: #5c4838;
+  --bg: #fff7ed;
   --bg-dark: #ffffff;
-  --border: #c9d8f5;
+  --border: #f1dcc6;
   --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
   --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
   --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
@@ -60,8 +60,8 @@ body {
   line-height: 1.6;
   color: var(--text);
   background:
-    radial-gradient(circle at 12% 0%, rgba(47, 169, 255, 0.12), transparent 30%),
-    radial-gradient(circle at 100% 14%, rgba(34, 211, 238, 0.1), transparent 24%),
+    radial-gradient(circle at 10% 2%, rgba(251, 191, 36, 0.18), transparent 34%),
+    radial-gradient(circle at 95% 10%, rgba(249, 115, 22, 0.12), transparent 28%),
     var(--bg);
 }
 
@@ -139,14 +139,14 @@ a:hover {
    ============================================ */
 
 header {
-  background: linear-gradient(130deg, #020817 0%, #06285f 42%, #0f4db7 100%);
+  background: linear-gradient(130deg, #3f1608 0%, #6b2a12 45%, #b45309 100%);
   color: white;
   padding: 0.55rem 0;
   box-shadow: 0 10px 24px rgba(2, 8, 23, 0.45);
   position: sticky;
   top: 0;
   z-index: 100;
-  border-bottom: 1px solid rgba(103, 232, 249, 0.2);
+  border-bottom: 1px solid rgba(253, 186, 116, 0.35);
 }
 
 nav {
@@ -188,7 +188,7 @@ nav {
   height: 46px;
   object-fit: cover;
   border-radius: 50%;
-  border: 2px solid rgba(103, 232, 249, 0.4);
+  border: 2px solid rgba(253, 186, 116, 0.6);
   box-shadow: 0 8px 18px rgba(1, 15, 40, 0.55);
 }
 
@@ -199,13 +199,13 @@ nav {
 }
 
 .brand-text {
-  color: #ecfeff;
+  color: #fff7ed;
   font-size: 1rem;
   font-weight: 700;
 }
 
 .brand-sub {
-  color: rgba(191, 219, 254, 0.9);
+  color: rgba(255, 237, 213, 0.9);
   font-size: 0.72rem;
   letter-spacing: 0.04em;
   text-transform: uppercase;
@@ -231,13 +231,13 @@ nav {
 }
 
 .nav-link:hover {
-  background: rgba(103, 232, 249, 0.2);
+  background: rgba(253, 186, 116, 0.28);
   opacity: 1;
   text-decoration: none;
 }
 
 .dark-toggle {
-  background: rgba(103, 232, 249, 0.18);
+  background: rgba(251, 191, 36, 0.2);
   color: white;
   border: none;
   padding: 0.5rem 0.85rem;
@@ -335,12 +335,12 @@ main {
   border-radius: var(--radius-xl);
   overflow: hidden;
   margin: 0.75rem 0 2.2rem;
-  box-shadow: 0 22px 44px rgba(30, 64, 175, 0.24);
-  background: #0f172a;
+  box-shadow: 0 24px 46px rgba(120, 53, 15, 0.26);
+  background: #2e150c;
 }
 
 .hero-metro {
-  border: 1px solid rgba(103, 232, 249, 0.38);
+  border: 1px solid rgba(253, 186, 116, 0.45);
 }
 
 .hero video {
@@ -365,7 +365,7 @@ main {
   content: "";
   position: absolute;
   inset: 0;
-  background: linear-gradient(110deg, rgba(2, 6, 23, 0.82), rgba(7, 42, 104, 0.52) 46%, rgba(15, 23, 42, 0.22));
+  background: linear-gradient(110deg, rgba(38, 18, 11, 0.88), rgba(124, 45, 18, 0.58) 46%, rgba(41, 19, 10, 0.3));
 }
 
 .hero::before {
@@ -373,8 +373,8 @@ main {
   position: absolute;
   inset: 0;
   background:
-    radial-gradient(circle at 15% 16%, rgba(103, 232, 249, 0.26), transparent 34%),
-    linear-gradient(180deg, rgba(15, 23, 42, 0), rgba(15, 23, 42, 0.7));
+    radial-gradient(circle at 15% 16%, rgba(253, 186, 116, 0.32), transparent 34%),
+    linear-gradient(180deg, rgba(15, 23, 42, 0), rgba(41, 19, 10, 0.75));
   z-index: 1;
 }
 
@@ -393,8 +393,8 @@ main {
   max-width: 720px;
   padding: clamp(0.95rem, 2vw, 1.35rem);
   border-radius: 16px;
-  border: 1px solid rgba(186, 230, 253, 0.3);
-  background: linear-gradient(160deg, rgba(2, 6, 23, 0.42), rgba(15, 23, 42, 0.24));
+  border: 1px solid rgba(254, 215, 170, 0.4);
+  background: linear-gradient(160deg, rgba(64, 25, 13, 0.52), rgba(124, 45, 18, 0.24));
   backdrop-filter: blur(7px);
   animation: heroRise 0.75s ease both;
 }
@@ -419,9 +419,9 @@ main {
   font-weight: 700;
   letter-spacing: 0.06em;
   text-transform: uppercase;
-  color: #cffafe;
-  border: 1px solid rgba(103, 232, 249, 0.5);
-  background: rgba(7, 42, 104, 0.5);
+  color: #ffedd5;
+  border: 1px solid rgba(253, 186, 116, 0.52);
+  background: rgba(124, 45, 18, 0.45);
 }
 
 .hero-logo {
@@ -511,9 +511,9 @@ main {
   border-radius: 0.7rem;
   font-size: 0.8rem;
   font-weight: 700;
-  color: #dbeafe;
-  background: rgba(15, 23, 42, 0.56);
-  border: 1px solid rgba(191, 219, 254, 0.45);
+  color: #ffedd5;
+  background: rgba(41, 19, 10, 0.6);
+  border: 1px solid rgba(253, 186, 116, 0.45);
 }
 
 .hero-metrics {
@@ -524,8 +524,8 @@ main {
 
 .metric-card {
   border-radius: 14px;
-  border: 1px solid rgba(186, 230, 253, 0.44);
-  background: linear-gradient(160deg, rgba(2, 6, 23, 0.66), rgba(7, 42, 104, 0.5));
+  border: 1px solid rgba(254, 215, 170, 0.5);
+  background: linear-gradient(160deg, rgba(69, 26, 12, 0.72), rgba(146, 64, 14, 0.48));
   padding: 0.8rem 0.9rem;
   box-shadow: 0 12px 30px rgba(2, 8, 23, 0.35);
   animation: metricPop 0.7s ease both;
@@ -555,12 +555,12 @@ main {
   font-size: 1.15rem;
   font-weight: 700;
   margin: 0;
-  color: #e0f2fe;
+  color: #fff7ed;
 }
 
 .metric-label {
   margin: 0.15rem 0 0;
-  color: #dbeafe;
+  color: #ffedd5;
   font-size: 0.84rem;
 }
 
@@ -652,9 +652,9 @@ main {
   border-radius: 999px;
   font-size: 0.82rem;
   font-weight: 700;
-  color: #dbeafe;
-  background: rgba(15, 23, 42, 0.58);
-  border: 1px solid rgba(191, 219, 254, 0.45);
+  color: #ffedd5;
+  background: rgba(41, 19, 10, 0.58);
+  border: 1px solid rgba(254, 215, 170, 0.45);
 }
 
 .gallery-grid {
@@ -668,9 +668,9 @@ main {
   position: relative;
   border-radius: 16px;
   overflow: hidden;
-  border: 1px solid #dbeafe;
-  background: #f8fbff;
-  box-shadow: 0 14px 30px rgba(30, 64, 175, 0.14);
+  border: 1px solid #f3d9bc;
+  background: #fffaf4;
+  box-shadow: 0 14px 30px rgba(124, 45, 18, 0.14);
 }
 
 .gallery-card img {
@@ -890,7 +890,7 @@ textarea {
 }
 
 .button-primary, button[type="submit"] {
-  background: linear-gradient(135deg, #0f4db7 0%, #072a68 100%);
+  background: linear-gradient(135deg, #b45309 0%, #7c2d12 100%);
   color: white;
 }
 
@@ -1277,11 +1277,16 @@ footer p {
 
 .home-section {
   margin-top: 4rem;
+  background: linear-gradient(155deg, rgba(255, 255, 255, 0.92), rgba(255, 247, 237, 0.8));
+  border: 1px solid #f4decb;
+  border-radius: 18px;
+  padding: clamp(1.1rem, 2.5vw, 1.75rem);
+  box-shadow: 0 12px 28px rgba(120, 53, 15, 0.08);
 }
 
 .home-section-title {
   margin-bottom: 0.75rem;
-  color: #072a68;
+  color: #7c2d12;
   position: relative;
   padding-bottom: 0.35rem;
 }
@@ -1294,7 +1299,7 @@ footer p {
   width: 74px;
   height: 3px;
   border-radius: 999px;
-  background: linear-gradient(90deg, #0f4db7, #22d3ee);
+  background: linear-gradient(90deg, #b45309, #f59e0b);
 }
 
 .section-lead {
@@ -1308,11 +1313,11 @@ footer p {
 }
 
 .feature-card {
-  background: linear-gradient(170deg, #ffffff 0%, #f1f7ff 100%);
-  border: 1px solid #bfd4fb;
+  background: linear-gradient(170deg, #ffffff 0%, #fff4e6 100%);
+  border: 1px solid #f3d3ad;
   border-radius: 16px;
   padding: 1.35rem;
-  box-shadow: 0 10px 24px rgba(7, 42, 104, 0.09);
+  box-shadow: 0 10px 24px rgba(124, 45, 18, 0.11);
   transition: transform 0.25s ease, box-shadow 0.25s ease;
   position: relative;
   overflow: hidden;
@@ -1326,7 +1331,7 @@ footer p {
   width: 120px;
   height: 120px;
   border-radius: 999px;
-  background: radial-gradient(circle, rgba(47, 169, 255, 0.28), transparent 68%);
+  background: radial-gradient(circle, rgba(245, 158, 11, 0.28), transparent 68%);
 }
 
 .feature-tag {
@@ -1339,9 +1344,9 @@ footer p {
   text-transform: uppercase;
   letter-spacing: 0.08em;
   font-weight: 800;
-  color: #075985;
-  background: #cffafe;
-  border: 1px solid #a5f3fc;
+  color: #7c2d12;
+  background: #ffedd5;
+  border: 1px solid #fdba74;
 }
 
 .feature-card:hover {
@@ -1352,7 +1357,7 @@ footer p {
 .feature-card h3 {
   margin-bottom: 0.35rem;
   font-size: 1.08rem;
-  color: #072a68;
+  color: #7c2d12;
 }
 
 .feature-card p {
@@ -1368,9 +1373,9 @@ footer p {
   gap: 0.7rem;
   padding: 1.35rem;
   border-radius: 16px;
-  border: 1px solid #bdd3fd;
-  background: linear-gradient(165deg, #ffffff 0%, #eff6ff 100%);
-  box-shadow: 0 12px 26px rgba(7, 42, 104, 0.12);
+  border: 1px solid #f2d8ba;
+  background: linear-gradient(165deg, #ffffff 0%, #fff4e6 100%);
+  box-shadow: 0 12px 26px rgba(124, 45, 18, 0.12);
   transition: transform 0.22s ease, box-shadow 0.22s ease;
 }
 
@@ -1382,7 +1387,7 @@ footer p {
 .repair-card h3 {
   margin: 0;
   font-size: 1.08rem;
-  color: #072a68;
+  color: #7c2d12;
 }
 
 .repair-card p {
@@ -1401,11 +1406,11 @@ footer p {
 }
 
 .quote-card {
-  background: linear-gradient(165deg, #ffffff 0%, #eef7ff 100%);
-  border: 1px solid #cde2ff;
+  background: linear-gradient(165deg, #ffffff 0%, #fff4e8 100%);
+  border: 1px solid #f4dcc0;
   border-radius: 16px;
   padding: 1.3rem;
-  box-shadow: 0 10px 20px rgba(7, 42, 104, 0.1);
+  box-shadow: 0 10px 20px rgba(124, 45, 18, 0.1);
   height: 100%;
 }
 
@@ -1425,15 +1430,15 @@ footer p {
   margin-top: 0.9rem;
   font-size: 0.92rem;
   font-weight: 700;
-  color: #0f4db7;
+  color: #9a3412;
 }
 
 .final-cta {
   border-radius: 18px;
-  border: 1px solid #b2cbfb;
+  border: 1px solid #f5c893;
   background:
-    radial-gradient(circle at 10% 10%, rgba(47, 169, 255, 0.2), transparent 36%),
-    linear-gradient(145deg, #031635 0%, #072a68 46%, #0f4db7 100%);
+    radial-gradient(circle at 10% 10%, rgba(253, 186, 116, 0.26), transparent 36%),
+    linear-gradient(145deg, #4a1d0f 0%, #7c2d12 48%, #b45309 100%);
   color: #ffffff;
   padding: clamp(1.3rem, 3vw, 2.1rem);
   box-shadow: 0 18px 36px rgba(2, 8, 23, 0.35);
@@ -1615,6 +1620,7 @@ footer p {
 
   .home-section {
     margin-top: 2.8rem;
+    padding: 1rem;
   }
 
   .section-lead {
