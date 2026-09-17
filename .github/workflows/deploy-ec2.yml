@@ -2,14 +2,28 @@ name: Deploy to EC2
 
 on:
   workflow_dispatch:
-  push:
-    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: revive-production
+  cancel-in-progress: false
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
 
+    environment: production
     steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Validate before deployment
+        run: |
+          pip install -r requirements.txt
+          bash scripts/check.sh
       - name: Deploy over SSH
         uses: appleboy/ssh-action@v1.0.3
         with:
@@ -19,7 +33,10 @@ jobs:
           script: |
             set -e
             cd ~/projects/revive-thrive-business-platform
-            git pull origin main
+            git fetch origin main
+            git checkout --detach "${{ github.sha }}"
+            venv/bin/pip install -r requirements.txt
+            PYTHON_BIN=venv/bin/python bash scripts/check.sh
             sudo systemctl restart revive-thrive
             sudo systemctl reload nginx
             curl -fsS http://127.0.0.1/health

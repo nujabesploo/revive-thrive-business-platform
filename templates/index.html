@@ -4,7 +4,7 @@
 
 {% block content %}
   <section class="hero hero-metro" data-reveal>
-    <video autoplay muted loop playsinline poster="{{ media_url(MEDIA_ASSETS['hero']['image']) }}" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+    <video controls preload="none" poster="{{ media_url(MEDIA_ASSETS['hero']['image']) }}" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
       <source src="{{ media_url(MEDIA_ASSETS['hero']['video']) }}" type="video/mp4">
     </video>
     <img class="hero-fallback" src="{{ media_url(MEDIA_ASSETS['hero']['image']) }}" alt="Repair technician at work" />
@@ -77,17 +77,6 @@
     </div>
   </section>
 
-  <section class="home-section" data-reveal>
-    <h2 class="home-section-title">Shop Anthem</h2>
-    <p class="section-lead">Play the official Revive & Thrive anthem while you browse.</p>
-    <div class="final-cta-actions">
-      <button id="anthem-toggle" type="button" class="button button-primary" aria-pressed="false">Play Anthem</button>
-    </div>
-    <audio id="anthem-audio" preload="none">
-      <source src="{{ media_url(MEDIA_ASSETS['audio']['anthem']) }}" type="audio/mpeg">
-    </audio>
-  </section>
-
   <section class="home-section home-features" data-reveal>
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
       <div class="feature-card">
@@ -146,7 +135,7 @@
     </div>
   </section>
 
-  {% include '_testimonials.html' %}
+
 
   <script>
     (function () {

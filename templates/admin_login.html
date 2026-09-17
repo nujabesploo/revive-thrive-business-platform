@@ -9,6 +9,7 @@
     <p>Enter your admin credentials to access repair tracking, inventory, and dashboard tools.</p>
 
     <form method="post">
+<input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
       <input type="hidden" name="next" value="{{ next_path }}" />
 
       <div class="field-group">

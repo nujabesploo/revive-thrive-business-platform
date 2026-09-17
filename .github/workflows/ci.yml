@@ -5,9 +5,14 @@ on:
     branches: [main]
   pull_request:
 
+permissions:
+  contents: read
+
 jobs:
   test:
     runs-on: ubuntu-latest
+    env:
+      DATABASE_URL: sqlite:////tmp/revive-ci.db
 
     steps:
       - name: Checkout
@@ -53,6 +58,9 @@ jobs:
 
           print("Route smoke tests passed")
           PY
+
+      - name: Transaction and security regression checks
+        run: bash scripts/check.sh
 
       - name: Docker build test
         run: docker build -t revive-thrive-platform:ci .

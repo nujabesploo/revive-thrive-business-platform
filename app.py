@@ -11,6 +11,7 @@ from flask import Flask, render_template, request, redirect, url_for, flash, abo
 from config import Config
 from database import get_db_connection, init_db, init_db_app
 from media import init_media_app, media_url
+from transactions import register_transactions
 
 app = Flask(__name__)
 load_dotenv()
@@ -18,17 +19,44 @@ app.config.from_object(Config)
 Config.init_app(app)
 
 # Notification / credentials
-BUSINESS_EMAIL = os.getenv("BUSINESS_EMAIL")
+BUSINESS_EMAIL = os.getenv("BUSINESS_EMAIL") or "tifealli28@gmail.com"
 MAIL_USERNAME = os.getenv("MAIL_USERNAME")
 MAIL_PASSWORD = os.getenv("MAIL_PASSWORD")
 
 TELEGRAM_BOT_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
 TELEGRAM_CHAT_ID = os.getenv("TELEGRAM_CHAT_ID")
 ADMIN_USERNAME = os.getenv("ADMIN_USERNAME", "admin")
-ADMIN_PASSWORD = os.getenv("ADMIN_PASSWORD", "change-me")
+ADMIN_PASSWORD = os.getenv("ADMIN_PASSWORD", "")
 
 init_db_app(app)
 init_media_app(app)
+register_transactions(app)
+
+def csrf_token():
+    if 'csrf_token' not in session:
+        session['csrf_token'] = secrets.token_urlsafe(32)
+    return session['csrf_token']
+
+@app.after_request
+def security_headers(response):
+    response.headers['X-Content-Type-Options'] = 'nosniff'
+    response.headers['X-Frame-Options'] = 'DENY'
+    response.headers['Referrer-Policy'] = 'strict-origin-when-cross-origin'
+    response.headers['Permissions-Policy'] = 'camera=(), microphone=(), geolocation=()'
+    response.headers['Content-Security-Policy'] = "frame-ancestors 'none'; object-src 'none'; base-uri 'self'; form-action 'self'"
+    if request.path.startswith(('/admin', '/ticket', '/status', '/inventory')) or session.get('is_admin'):
+        response.headers['Cache-Control'] = 'no-store'
+    if os.getenv('APP_ENV') == 'production' and request.is_secure:
+        response.headers['Strict-Transport-Security'] = 'max-age=31536000'
+    return response
+
+@app.before_request
+def verify_csrf():
+    if request.method == 'POST':
+        expected = session.get('csrf_token', '')
+        supplied = request.form.get('csrf_token', '')
+        if not expected or not secrets.compare_digest(expected, supplied):
+            abort(400, 'Your form expired. Reload the page and try again.')
 
 with app.app_context():
     init_db()
@@ -39,6 +67,7 @@ def inject_template_helpers():
     return {
         "media_url": media_url,
         "is_admin_authenticated": session.get("is_admin") is True,
+        "csrf_token": csrf_token,
     }
 
 
@@ -71,12 +100,12 @@ def send_email(to_email, subject, body):
     msg.set_content(body)
 
     try:
-        with smtplib.SMTP_SSL("smtp.gmail.com", 465) as smtp:
+        with smtplib.SMTP_SSL("smtp.gmail.com", 465, timeout=15) as smtp:
             smtp.login(MAIL_USERNAME, MAIL_PASSWORD)
             smtp.send_message(msg)
         print("Email sent.")
     except Exception as e:
-        print(f"Email failed: {e}")
+        app.logger.error("Email delivery failed: %s", type(e).__name__)
 
 
 def send_telegram(message):
@@ -98,7 +127,7 @@ def send_telegram(message):
         print("Telegram sent.")
         return True
     except Exception as e:
-        print(f"Telegram failed: {e}")
+        app.logger.error("Telegram delivery failed: %s", type(e).__name__)
         return False
 
 
@@ -119,7 +148,7 @@ def normalize_phone_number(phone):
 
 @app.route("/")
 def home():
-    return render_template("index.html")
+    return render_template("home_refined.html")
 
 
 @app.route("/health")
@@ -305,7 +334,7 @@ def admin_login():
         valid_user = secrets.compare_digest(username, ADMIN_USERNAME)
         valid_pass = secrets.compare_digest(password, ADMIN_PASSWORD)
 
-        if valid_user and valid_pass:
+        if ADMIN_PASSWORD and ADMIN_PASSWORD != "change-me" and valid_user and valid_pass:
             session["is_admin"] = True
             session["admin_username"] = username
             flash("Admin login successful.", "success")

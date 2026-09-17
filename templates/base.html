@@ -4,9 +4,8 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>{% block title %}Revive & Thrive Tech{% endblock %}</title>
-  <!-- Tailwind CDN for rapid UI/UX prototyping -->
-  <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='refined.css') }}" />
   <script defer src="{{ url_for('static', filename='site.js') }}"></script>
 </head>
 <body>
@@ -31,13 +30,14 @@
       <a href="/status" class="nav-link">Track Repair</a>
       <a href="/inventory" class="nav-link">Inventory</a>
       <a href="/admin" class="nav-link">Admin</a>
+      <a href="/admin/transactions" class="nav-link">Transactions</a>
       <form method="post" action="{{ url_for('admin_logout') }}" class="inline-logout-form">
+<input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
         <button type="submit" class="nav-link nav-link-button">Logout</button>
       </form>
       {% else %}
       <a href="{{ url_for('admin_login') }}" class="nav-link">Admin Login</a>
       {% endif %}
-      <button id="dark-toggle" aria-label="Toggle dark mode" class="dark-toggle">🌙</button>
     </nav>
   </div>
 </header>
@@ -61,6 +61,6 @@
     <p class="footer-brand">Revive & Thrive Tech</p>
     <p class="footer-copy">© 2026 Revive & Thrive Tech. Professional device repairs in Arlington, TX.</p>
   </div>
-</footer>
+<div class="business-contact"><a href="mailto:tifealli28@gmail.com">tifealli28@gmail.com</a> <a href="tel:+13476715335">Call (347) 671-5335</a></div></footer>
 </body>
 </html>

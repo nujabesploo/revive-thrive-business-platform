@@ -8,6 +8,7 @@
     <p>Enter the phone number used when booking your repair.</p>
 
     <form method="POST" class="form">
+<input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
       <div class="field-group">
         <label for="phone">Phone Number</label>
         <input id="phone" type="text" name="phone" placeholder="Enter Phone Number" required />

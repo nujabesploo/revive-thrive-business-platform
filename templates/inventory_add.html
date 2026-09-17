@@ -8,6 +8,7 @@
     <p>Enter details for a new parts inventory item.</p>
 
     <form method="POST" class="form">
+<input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
       <div class="form-row">
         <div class="field-group">
           <label for="item_name">Item Name *</label>

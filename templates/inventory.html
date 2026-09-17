@@ -93,6 +93,7 @@
                 <td>
                   <a href="/inventory/edit/{{ item.id }}" class="button button-sm button-secondary">Edit</a>
                   <form method="POST" action="/inventory/delete/{{ item.id }}" style="display:inline;">
+<input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
                     <button type="submit" class="button button-sm button-danger" onclick="return confirm('Delete this item?')">Delete</button>
                   </form>
                 </td>
