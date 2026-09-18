@@ -1,68 +1,12 @@
 {% extends 'base.html' %}
-
-{% block title %}Services | Revive & Thrive Tech{% endblock %}
-
+{% block title %}Screen repairs & pricing | Revive & Thrive Tech{% endblock %}
 {% block content %}
-<section class="section section-shell" data-reveal>
-  <div class="section-banner">
-    <h1>Repair Services Built for Speed</h1>
-    <p>Select the repair service that fits your device issue and reserve your priority slot in minutes.</p>
-    <div class="banner-actions">
-      <a class="button button-primary" href="/book">Start Booking</a>
-      <a class="button button-secondary" href="tel:+13476715335">Call (347) 671-5335</a>
-    </div>
-  </div>
-  <div class="cards">
-    <div class="card">
-      <img src="{{ media_url(MEDIA_ASSETS['services']['screen_repair']) }}" alt="Screen repair service" loading="lazy" />
-      <h3>iPhone Screen Repair</h3>
-      <p>Screen replacement for cracked or damaged iPhones.</p>
-      <a class="button button-primary" href="/book">Book Now</a>
-    </div>
-
-    <div class="card">
-      <img src="{{ media_url(MEDIA_ASSETS['services']['screen_repair']) }}" alt="Samsung screen repair service" loading="lazy" />
-      <h3>Samsung Screen Repair</h3>
-      <p>Screen repairs for Samsung Galaxy devices.</p>
-      <a class="button button-primary" href="/book">Book Now</a>
-    </div>
-
-    <div class="card">
-      <img src="{{ media_url(MEDIA_ASSETS['services']['battery_repair']) }}" alt="Battery replacement service" loading="lazy" />
-      <h3>Battery Replacement</h3>
-      <p>Battery replacement for phones and tablets.</p>
-      <a class="button button-primary" href="/book">Book Now</a>
-    </div>
-
-    <div class="card">
-      <img src="{{ media_url(MEDIA_ASSETS['services']['charging_port']) }}" alt="Charging port repair service" loading="lazy" />
-      <h3>Charging Port Repair</h3>
-      <p>Repair charging issues and damaged ports.</p>
-      <a class="button button-primary" href="/book">Book Now</a>
-    </div>
-
-    <div class="card">
-      <img src="{{ media_url(MEDIA_ASSETS['services']['water_damage']) }}" alt="Water damage diagnostic service" loading="lazy" />
-      <h3>Tablet Repair</h3>
-      <p>Tablet diagnostics, screens, buttons, and cameras.</p>
-      <a class="button button-primary" href="/book">Book Now</a>
-    </div>
-
-    <div class="card">
-      <img src="{{ media_url(MEDIA_ASSETS['gallery']['technician_repair']) }}" alt="Device diagnostic service" loading="lazy" />
-      <h3>Diagnostic Scan</h3>
-      <p>Find the issue before committing to a repair.</p>
-      <a class="button button-primary" href="/book">Book Now</a>
-    </div>
-  </div>
-
-  <div class="final-cta services-cta" data-reveal>
-    <h2>Need it fixed fast?</h2>
-    <p>Reserve now and our team will confirm the next available repair window right away.</p>
-    <div class="final-cta-actions">
-      <a class="button button-primary" href="/book">Book Repair</a>
-      <a class="button button-contrast" href="/contact">Ask a Question</a>
-    </div>
-  </div>
-</section>
+<section class="repair-catalog"><p class="eyebrow">FIND YOUR REPAIR</p><h1>Your phone.<br>A clearer next step.</h1><p class="intro-copy">Browse iPhone, Samsung Galaxy and other device repairs. Your exact model and replacement part determine the final quote.</p>
+<nav class="device-tabs" aria-label="Repair categories"><a href="#iphone">iPhone</a><a href="#samsung">Samsung Galaxy</a><a href="#other">Other devices</a><a href="#repair-prices">Repair pricing</a></nav>
+<div class="device-grid">{% for id,brand,description in [('iphone','iPhone','Cracked glass, display lines, black screens or touch problems.'),('samsung','Samsung Galaxy','Screen and display enquiries for Galaxy S, A and Z models.'),('other','Other phones & tablets','Tell us your manufacturer and model so we can check repair options.')] %}<article id="{{ id }}" class="device-card"><img class="service-photo" src="https://d2spdapo89woam.cloudfront.net/releases/20260918/services/{{ id }}-v2.png" alt="{{ brand }} screen replacement illustration" width="1536" height="1024" loading="lazy"><p class="eyebrow">SCREEN REPAIR</p><h2>{{ brand }}</h2><p>{{ description }}</p><ul><li>Exact model checked before quoting</li><li>Replacement part and repair scope confirmed</li></ul><a class="btn" href="/book">Request a screen quote</a></article>{% endfor %}</div>
+<section id="repair-prices" class="home-section"><p class="eyebrow">REPAIR PRICE GUIDE</p><h2>Know the price landscape.</h2><p class="price-guide-note">Published market benchmarks checked September 18, 2026. These are other providers’ listed prices, not a Revive &amp; Thrive quote. We confirm your model, parts and total before you authorize a repair.</p><div class="table-responsive"><table class="table"><caption>Screen repair comparisons in US dollars</caption><thead><tr><th>Device</th><th>Repair</th><th>Published price</th><th>Source</th></tr></thead><tbody>
+{% for device,price in [('iPhone 11',65),('iPhone 12',70),('iPhone 13 / 13 Mini',80),('iPhone 14',80),('iPhone 15',90),('iPhone 16',100)] %}<tr><td>{{ device }}</td><td>Screen repair*</td><td class="price-amount">${{ price }}</td><td><a href="https://ifixdfw.com/pricing/" rel="noopener">iFix Dallas</a></td></tr>{% endfor %}
+{% for device,price in [('Galaxy S23',174),('Galaxy S23 Ultra',259),('Galaxy S24',174),('Galaxy S24 Ultra',259)] %}<tr><td>{{ device }}</td><td>Front screen only†</td><td class="price-amount">${{ price }}</td><td><a href="https://www.samsung.com/us/support/cracked-screen-repair/" rel="noopener">Samsung US</a></td></tr>{% endfor %}
+</tbody></table></div><p class="price-guide-note">*iFix does not specify the display grade or tax treatment on its price list. †Samsung suggested prices exclude taxes and fees, vary by location, and require an eligible device without other damage. Screen-only repair differs from a screen, frame and battery module replacement. Revive &amp; Thrive is an independent repair business.</p><a class="btn" href="/book">Get your repair quote</a></section>
+<section class="help-band"><div><h2>Not sure which model you have?</h2><p>Contact us before choosing a repair.</p></div><a class="btn" href="tel:+13476715335">Call (347) 671-5335</a></section></section>
 {% endblock %}
