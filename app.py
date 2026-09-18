@@ -66,6 +66,7 @@ with app.app_context():
 def inject_template_helpers():
     return {
         "media_url": media_url,
+        "hero_motion_ready": os.path.isfile(os.path.join(app.static_folder, "motion", "ready.txt")),
         "is_admin_authenticated": session.get("is_admin") is True,
         "csrf_token": csrf_token,
     }
