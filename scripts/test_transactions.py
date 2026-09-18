@@ -21,6 +21,10 @@ with app.test_client() as client:
         assert "form-action 'self'" in response.headers['Content-Security-Policy']
     assert client.post('/admin/transactions',data={}).status_code==400
     assert client.get('/admin/transactions').status_code==302
+    assert client.get('/status').status_code==302
+    with client.session_transaction() as state:
+        status_token=state['csrf_token']
+    assert client.post('/status',data={'csrf_token':status_token,'phone':'3476715335'}).status_code==302
     with client.session_transaction() as state:
         token=state['csrf_token']
         state['is_admin']=True
