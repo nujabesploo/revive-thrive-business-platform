@@ -315,7 +315,16 @@ def book():
         flash("Repair request submitted successfully. Check your email for confirmation and next steps.", "success")
         return redirect(url_for("success"))
 
-    return render_template("book.html", form={})
+    # Only accept supported public selections; never prefill personal data from URLs.
+    selections = {}
+    for key, allowed in {
+        "device_type": {"iPhone", "Samsung", "Android", "Tablet", "Other"},
+        "service_needed": {"Screen Repair", "Battery Replacement", "Charging Port Repair", "Camera Repair", "Speaker/Microphone Repair", "Water Damage Diagnostic", "General Diagnostic"},
+    }.items():
+        value = request.args.get(key, "")
+        if value in allowed:
+            selections[key] = value
+    return render_template("book.html", form=selections)
 
 
 @app.route("/success")

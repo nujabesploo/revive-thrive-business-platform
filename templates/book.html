@@ -9,7 +9,8 @@
     <p>We’ll confirm pricing, availability, and any warranty terms before the repair.</p>
 
     <div class="form-scene"><img src="https://d2spdapo89woam.cloudfront.net/releases/20260918/services/iphone-v2.png" alt="Illustration of a phone and replacement display" width="1536" height="1024"></div>
-    <form method="POST" class="form">
+    <form method="POST" class="form" data-booking-form>
+<div class="booking-selection" role="status" aria-live="polite" data-booking-summary>Your repair request starts here.</div>
 <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
       <div class="field-group">
         <label for="customer_name">Full Name</label>
