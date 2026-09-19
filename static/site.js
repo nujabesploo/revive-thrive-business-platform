@@ -19,6 +19,12 @@ if (bookingForm) {
   const updateSummary = () => {
     const device = bookingForm.elements.device_type.value;
     const service = bookingForm.elements.service_needed.value;
+    const image = document.querySelector('[data-device-image]');
+    if (image) {
+      const category = ['Samsung', 'Android'].includes(device) ? 'samsung' : ['Tablet', 'Other'].includes(device) ? 'other' : 'iphone';
+      image.src = 'https://d2spdapo89woam.cloudfront.net/releases/20260919/higgsfield/' + category + '-higgsfield.jpg';
+      image.alt = (device || 'Phone') + ' repair illustration';
+    }
     summary.textContent = device || service
       ? [device, service].filter(Boolean).join(' · ') + ' — we’ll confirm your quote before repair.'
       : 'Choose your device and repair below to start your request.';
