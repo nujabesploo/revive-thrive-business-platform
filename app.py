@@ -781,7 +781,8 @@ def find_available_port(host, preferred_port=5000, max_tries=20):
 
 
 if __name__ == "__main__":
-    init_db()
+    with app.app_context():
+        init_db()
     host = os.environ.get("FLASK_RUN_HOST", "0.0.0.0")
     configured_port = os.environ.get("PORT", 5000)
     port = find_available_port(host, configured_port)
