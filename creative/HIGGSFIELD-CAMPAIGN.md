@@ -88,5 +88,5 @@ resolution: 2k
 
 ## Video
 
-Free Cutout preset, 720p, 16:9. Job 66485ad0-c913-4d01-9757-3cc5ac1f8caa. Pending review; not yet published.
+Free Cutout preset, 720p, 16:9. Job 66485ad0-c913-4d01-9757-3cc5ac1f8caa. Completed. Opening, transition and final framing reviewed in browser. Eight-second product animation, not a presenter testimonial. Prepared for website publication.
 
