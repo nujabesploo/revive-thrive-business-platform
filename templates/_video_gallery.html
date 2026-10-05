@@ -1,0 +1,25 @@
+<section class="home-section video-showcase" aria-labelledby="video-heading">
+  <div class="section-heading">
+    <div><p class="eyebrow">WATCH & EXPLORE</p><h2 id="video-heading">A closer look at Revive & Thrive.</h2></div>
+    <a class="text-link" href="{{ url_for('book') }}">Discuss your repair →</a>
+  </div>
+  {% for group_title, videos in [('At the repair bench', repair_videos), ('Brand films', promo_videos)] %}
+    {% if videos %}
+    <h3>{{ group_title }}</h3>
+    <div class="repair-video-grid">
+      {% for video in videos %}
+      <article class="repair-video-card">
+        <video controls playsinline preload="none" poster="{{ url_for('static', filename=video.poster) }}" aria-label="{{ video.title }}">
+          <source src="{{ url_for('static', filename=video.src) }}" type="video/mp4">
+          {% if video.captions %}<track kind="captions" src="{{ url_for('static', filename=video.captions) }}" srclang="en" label="English" default>{% endif %}
+          Your browser does not support video. <a href="{{ url_for('static', filename=video.src) }}">Open the video</a>.
+        </video>
+        <div class="repair-video-copy"><p class="eyebrow">{{ video.label }}</p><h4>{{ video.title }}</h4><p>{{ video.description }}</p>
+        {% if video.transcript %}<details><summary>Read video transcript</summary><p>{{ video.transcript }}</p></details>{% endif %}
+        </div>
+      </article>
+      {% endfor %}
+    </div>
+    {% endif %}
+  {% endfor %}
+</section>

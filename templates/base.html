@@ -5,10 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>{% block title %}Revive & Thrive Tech{% endblock %}</title>
   <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
-  <link rel="stylesheet" href="{{ url_for('static', filename='refined.css', v='20260920a') }}" />
-  <script defer src="{{ url_for('static', filename='site.js', v='20260920a') }}"></script>
+  <link rel="stylesheet" href="{{ url_for('static', filename='refined.css', v='20261004-video') }}" />
+  <script defer src="{{ url_for('static', filename='site.js', v='20261004-video') }}"></script>
 </head>
-<body>
+<body class="{% if request.endpoint == 'home' %}cinematic-home{% endif %}">
 <a class="skip-link" href="#main-content">Skip to content</a>
 <header class="bg-white dark:bg-gray-900 shadow">
   <div class="site-header container mx-auto px-4 py-3">
@@ -59,7 +59,7 @@
 <footer>
   <div class="container footer-inner">
     <p class="footer-brand">Revive & Thrive Tech</p>
-    <p class="footer-copy">© 2026 Revive & Thrive Tech. Professional device repairs in Arlington, TX.</p>
+    <p class="footer-copy">© 2026 Revive & Thrive Tech. Device repair and IT support. Coming to Grow DeSoto Market Place, 324 E Belt Line Rd, DeSoto, TX 75115. Contact us before visiting.</p>
   </div>
 <div class="business-contact"><a href="mailto:tifealli28@gmail.com">tifealli28@gmail.com</a> <a href="tel:+13476715335">Call (347) 671-5335</a></div></footer>
 </body>

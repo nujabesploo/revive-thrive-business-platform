@@ -65,3 +65,34 @@ body{background:#f3f6fa}.site-header{min-height:88px}.brand-logo{max-height:58px
 .intro-photo img,.service-photo{object-fit:contain;object-position:center;background:#071729}
 .intro-photo{min-width:0;max-width:100%;overflow:hidden}
 .form-scene,.device-card{border:1px solid #d7e1eb}
+
+/* Customer footage and clearly labeled promotional media. */
+.repair-video-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr)); gap:24px; margin:20px 0 36px; }
+.repair-video-card { overflow:hidden; border:1px solid #cad5de; border-radius:16px; background:#fff; color:#172b3e; }
+.repair-video-card video { display:block; width:100%; aspect-ratio:16/9; object-fit:contain; background:#102333; }
+.repair-video-copy { padding:24px; }
+.repair-video-copy h4 { font-size:1.3rem; margin:10px 0; }
+.repair-video-copy p { line-height:1.65; }
+.repair-video-copy summary { cursor:pointer; text-decoration:underline; }
+.repair-video-copy summary:focus-visible { outline:3px solid #008da8; outline-offset:4px; }
+.video-showcase .repair-video-card { max-width:760px; }
+.help-band h2 { color:#f4f8fc; }
+
+/* Midnight studio lighting: a calm cinematic setting, without autoplay. */
+body { background:radial-gradient(ellipse at 8% 0%,#17445c 0,transparent 48%),radial-gradient(ellipse at 95% 30%,#15354c 0,transparent 48%),#071422; }
+.cinematic-home .repair-intro { background:radial-gradient(ellipse at 85% 25%,#154960 0,transparent 55%),linear-gradient(135deg,#10283d,#071522); border:1px solid #31576b; box-shadow:0 28px 80px #0005; }
+.cinematic-home .repair-intro h1 { color:#f0f8fc; }
+.cinematic-home .intro-copy,.cinematic-home .intro-note { color:#c4d7e4; }
+.cinematic-home .repair-intro .eyebrow,.cinematic-home .repair-intro .text-link { color:#8fe3ef; }
+.cinematic-home .home-section { background:transparent; color:#dfedf6; border:0; }
+.cinematic-home .home-section h2,.cinematic-home .home-section h3 { color:#f0f8fc; }
+.cinematic-home .home-section .eyebrow,.cinematic-home .home-section .text-link { color:#8fe3ef; }
+.cinematic-home .service-tile { background:#10273a; border:1px solid #315063; color:#d5e5ef; }
+.cinematic-home .service-tile h3 { color:#f2f9ff; }
+.cinematic-home .service-number,.cinematic-home .service-action { color:#8fe3ef; border-color:#315063; }
+.cinematic-home .repair-process li { border-color:#315063; }
+.cinematic-home .repair-process p { color:#c4d7e4; }
+.cinematic-home .device-tabs a { background:#10273a; border-color:#315063; color:#d8f3ff; }
+.cinematic-home .repair-video-card { background:#10273a; border-color:#315063; color:#d5e5ef; }
+.cinematic-home .repair-video-copy h4 { color:#f2f9ff; }
+.cinematic-home .help-band { border:1px solid #315063; background:linear-gradient(110deg,#11374b,#102438); }

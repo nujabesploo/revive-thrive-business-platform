@@ -12,6 +12,7 @@ from config import Config
 from database import get_db_connection, init_db, init_db_app
 from media import init_media_app, media_url
 from transactions import register_transactions
+from video_catalog import REPAIR_VIDEOS, PROMO_VIDEOS
 
 app = Flask(__name__)
 load_dotenv()
@@ -149,7 +150,7 @@ def normalize_phone_number(phone):
 
 @app.route("/")
 def home():
-    return render_template("home_refined.html")
+    return render_template("home_refined.html", repair_videos=REPAIR_VIDEOS, promo_videos=PROMO_VIDEOS)
 
 
 @app.route("/health")
