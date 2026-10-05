@@ -33,3 +33,22 @@ if (bookingForm) {
   bookingForm.elements.service_needed.addEventListener('change', updateSummary);
   updateSummary();
 }
+
+// Current-page orientation and subtle pointer depth; no tracking or background loop.
+document.querySelectorAll('.site-nav a').forEach(link => {
+  if (new URL(link.href).pathname === location.pathname) link.setAttribute('aria-current', 'page');
+});
+const depthPreference = matchMedia('(prefers-reduced-motion: no-preference) and (hover: hover) and (pointer: fine)');
+const depthCards = document.querySelectorAll('.service-tile, .device-card, .form-scene, .stat-card');
+depthCards.forEach(card => {
+  card.classList.add('depth-card');
+  const reset = () => { card.style.removeProperty('--rx'); card.style.removeProperty('--ry'); };
+  card.addEventListener('pointermove', event => {
+    if (!depthPreference.matches) return;
+    const rect = card.getBoundingClientRect();
+    card.style.setProperty('--rx', `${((.5 - (event.clientY - rect.top) / rect.height) * 4).toFixed(2)}deg`);
+    card.style.setProperty('--ry', `${(((event.clientX - rect.left) / rect.width - .5) * 4).toFixed(2)}deg`);
+  }, {passive:true});
+  card.addEventListener('pointerleave', reset);
+  depthPreference.addEventListener('change', reset);
+});

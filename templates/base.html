@@ -5,8 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>{% block title %}Revive & Thrive Tech{% endblock %}</title>
   <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
-  <link rel="stylesheet" href="{{ url_for('static', filename='refined.css', v='20261004-video') }}" />
-  <script defer src="{{ url_for('static', filename='site.js', v='20261004-video') }}"></script>
+  <link rel="stylesheet" href="{{ url_for('static', filename='refined.css', v='20261005-studio') }}" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='cinematic.css', v='20261005-studio') }}" />
+  <script defer src="{{ url_for('static', filename='site.js', v='20261005-studio') }}"></script>
 </head>
 <body class="{% if request.endpoint == 'home' %}cinematic-home{% endif %}">
 <a class="skip-link" href="#main-content">Skip to content</a>
