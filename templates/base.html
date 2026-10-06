@@ -5,9 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>{% block title %}Revive & Thrive Tech{% endblock %}</title>
   <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
-  <link rel="stylesheet" href="{{ url_for('static', filename='refined.css', v='20261005-studio') }}" />
-  <link rel="stylesheet" href="{{ url_for('static', filename='cinematic.css', v='20261005-studio') }}" />
-  <script defer src="{{ url_for('static', filename='site.js', v='20261005-studio') }}"></script>
+  <link rel="stylesheet" href="{{ url_for('static', filename='refined.css', v='20261006-story') }}" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='cinematic.css', v='20261006-story') }}" />
+  <script defer src="{{ url_for('static', filename='site.js', v='20261006-story') }}"></script>
 </head>
 <body class="{% if request.endpoint == 'home' %}cinematic-home{% endif %}">
 <a class="skip-link" href="#main-content">Skip to content</a>
@@ -37,7 +37,7 @@
         <button type="submit" class="nav-link nav-link-button">Logout</button>
       </form>
       {% else %}
-      <a href="{{ url_for('admin_login') }}" class="nav-link">Admin Login</a>
+
       {% endif %}
     </nav>
   </div>
@@ -62,6 +62,6 @@
     <p class="footer-brand">Revive & Thrive Tech</p>
     <p class="footer-copy">© 2026 Revive & Thrive Tech. Device repair and IT support. Opening October 20, 2026 · Grow DeSoto Market Place · Booth #701 · 324 E Belt Line Rd, DeSoto, TX 75115.</p>
   </div>
-<div class="business-contact"><a href="mailto:tifealli28@gmail.com">tifealli28@gmail.com</a> <a href="tel:+13476715335">Call (347) 671-5335</a></div></footer>
+<div class="business-contact"><a href="{{ url_for('admin_login') }}">Staff sign in</a> <a href="mailto:tifealli28@gmail.com">tifealli28@gmail.com</a> <a href="tel:+13476715335">Call (347) 671-5335</a></div></footer>
 </body>
 </html>

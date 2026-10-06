@@ -9,16 +9,16 @@ REPAIR_VIDEOS = [
 PROMO_VIDEOS = [
     {
         "title": "Inside the device",
-        "description": "A Blender-made 3D product film exploring device components. An illustrative animation, not footage of a customer repair.",
+        "description": "A cinematic exploration of the details inside everyday technology.",
         "src": "motion/v2/repair-intro.mp4",
         "poster": "motion/v2/repair-poster.png",
-        "label": "Blender 3D brand film",
+        "label": "Brand film",
     },
     {
         "title": "A fresh start for your device",
-        "description": "An AI-generated product animation introducing our repair services. This is promotional imagery, not footage of a customer repair.",
+        "description": "A fresh perspective on the devices that keep your day moving.",
         "src": "motion/higgsfield-reveal.mp4",
         "poster": "motion/repair-poster.png",
-        "label": "AI-generated promotion",
+        "label": "Brand film",
     }
 ]
