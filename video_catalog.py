@@ -8,17 +8,19 @@ REPAIR_VIDEOS = [
 
 PROMO_VIDEOS = [
     {
-        "title": "Inside the device",
-        "description": "A cinematic exploration of the details inside everyday technology.",
-        "src": "motion/v2/repair-intro.mp4",
-        "poster": "motion/v2/repair-poster.png",
+        "title": "Explore your repair options",
+        "description": "Start with your device and discuss the next step.",
+        "src": "motion/ugc-oct7/repair-options.mp4",
+        "poster": "motion/ugc-oct7/repair-options.jpg",
+        "captions": "motion/ugc-oct7/repair-options.vtt",
         "label": "Brand film",
     },
     {
-        "title": "A fresh start for your device",
-        "description": "A fresh perspective on the devices that keep your day moving.",
-        "src": "motion/higgsfield-reveal.mp4",
-        "poster": "motion/repair-poster.png",
+        "title": "Meet Revive & Thrive Tech in DeSoto",
+        "description": "Opening October 20 at Grow DeSoto Market Place, booth 701.",
+        "src": "motion/ugc-oct7/desoto-opening-reviewed.mp4",
+        "poster": "motion/ugc-oct7/desoto-opening.jpg",
+        "captions": "motion/ugc-oct7/desoto-opening.vtt",
         "label": "Brand film",
     }
 ]
