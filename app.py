@@ -13,6 +13,8 @@ from database import get_db_connection, init_db, init_db_app
 from media import init_media_app, media_url
 from transactions import register_transactions
 from video_catalog import REPAIR_VIDEOS, PROMO_VIDEOS
+from repair_catalog import DEVICE_TYPES, REPAIR_SERVICES
+from repair_tracking import issue_tracking_code, lookup_tracking_code
 
 app = Flask(__name__)
 load_dotenv()
@@ -45,7 +47,7 @@ def security_headers(response):
     response.headers['Referrer-Policy'] = 'strict-origin-when-cross-origin'
     response.headers['Permissions-Policy'] = 'camera=(), microphone=(), geolocation=()'
     response.headers['Content-Security-Policy'] = "frame-ancestors 'none'; object-src 'none'; base-uri 'self'; form-action 'self'"
-    if request.path.startswith(('/admin', '/ticket', '/status', '/inventory')) or session.get('is_admin'):
+    if request.path.startswith(('/admin', '/ticket', '/status', '/inventory', '/track', '/success', '/api/v1/repair-status')) or session.get('is_admin'):
         response.headers['Cache-Control'] = 'no-store'
     if os.getenv('APP_ENV') == 'production' and request.is_secure:
         response.headers['Strict-Transport-Security'] = 'max-age=31536000'
@@ -70,6 +72,8 @@ def inject_template_helpers():
         "hero_motion_ready": os.path.isfile(os.path.join(app.static_folder, "motion", "ready.txt")),
         "is_admin_authenticated": session.get("is_admin") is True,
         "csrf_token": csrf_token,
+        "device_types": DEVICE_TYPES,
+        "repair_services": REPAIR_SERVICES,
     }
 
 
@@ -158,6 +162,20 @@ def health():
     return {"status": "healthy", "service": "revive-thrive-tech"}, 200
 
 
+@app.get("/api/v1/repair-catalog")
+def repair_catalog_api():
+    # Public, read-only data only. Customer records remain behind staff login.
+    response = jsonify({
+        "version": 1,
+        "devices": list(DEVICE_TYPES),
+        "services": list(REPAIR_SERVICES),
+        "booking_url": url_for("book"),
+        "quote_required": True,
+    })
+    response.headers["Cache-Control"] = "public, max-age=300"
+    return response
+
+
 @app.route("/services")
 def services():
     return render_template("services.html")
@@ -183,6 +201,10 @@ def book():
         if not all(form_data.values()):
             flash("Please complete every field before submitting your booking.", "error")
             return render_template("book.html", form=form_data)
+
+        if form_data["device_type"] not in DEVICE_TYPES or form_data["service_needed"] not in REPAIR_SERVICES:
+            flash("Choose a supported device and repair service.", "error")
+            return render_template("book.html", form=form_data), 400
 
         try:
             appointment_date = datetime.strptime(
@@ -246,6 +268,9 @@ def book():
         conn.commit()
         conn.close()
 
+        tracking_code = issue_tracking_code(ticket_id)
+        session["tracking_code"] = tracking_code
+
         # prepare notification messages
         business_message = f"""
     🔔 NEW BOOKING
@@ -267,13 +292,15 @@ def book():
 
     Thanks for choosing Revive & Thrive Tech.
 
-    Your repair request is confirmed and already in our queue.
+    We received your repair request. Your appointment and quote are not confirmed yet.
 
     Ticket: {ticket_code}
     Device: {form_data.get("device_type")} {form_data.get("device_model")}
     Service: {form_data.get("service_needed")}
 
-    Track your repair: https://revivethrivetech.com/status
+    Track your repair: https://revivethrivetech.com/track
+    Private tracking code: {tracking_code}
+    Keep this code private. It expires after 90 days.
 
     We will contact you shortly with the next update so your experience feels smooth from start to finish.
 
@@ -313,14 +340,14 @@ def book():
 
         # (No SMS here — using email and Telegram notifications)
 
-        flash("Repair request submitted successfully. Check your email for confirmation and next steps.", "success")
+        flash("Repair request saved. Keep the private tracking code shown below.", "success")
         return redirect(url_for("success"))
 
     # Only accept supported public selections; never prefill personal data from URLs.
     selections = {}
     for key, allowed in {
-        "device_type": {"iPhone", "Samsung", "Android", "Tablet", "Other"},
-        "service_needed": {"Screen Repair", "Battery Replacement", "Charging Port Repair", "Camera Repair", "Speaker/Microphone Repair", "Water Damage Diagnostic", "General Diagnostic"},
+        "device_type": DEVICE_TYPES,
+        "service_needed": REPAIR_SERVICES,
     }.items():
         value = request.args.get(key, "")
         if value in allowed:
@@ -330,7 +357,27 @@ def book():
 
 @app.route("/success")
 def success():
-    return render_template("success.html")
+    return render_template("success.html", tracking_code=session.get("tracking_code"))
+
+
+@app.route("/track", methods=["GET", "POST"])
+def track_repair():
+    result = None
+    error = None
+    if request.method == "POST":
+        result = lookup_tracking_code(request.form.get("tracking_code", "").strip())
+        if result is None:
+            error = "We could not verify this code. Check your saved code or contact us for help."
+    return render_template("track.html", repair=result, error=error)
+
+
+@app.post("/api/v1/repair-status")
+def repair_status_api():
+    # CSRF-protected form POST keeps the private capability out of URL/access logs.
+    result = lookup_tracking_code(request.form.get("tracking_code", "").strip())
+    if result is None:
+        return jsonify({"error": "Tracking code unavailable or expired"}), 404
+    return jsonify({"repair": result})
 
 
 @app.route("/admin/login", methods=["GET", "POST"])

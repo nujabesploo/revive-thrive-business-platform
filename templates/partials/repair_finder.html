@@ -1,0 +1,8 @@
+<section class="repair-finder" aria-labelledby="finder-heading">
+  <div><p class="eyebrow">START WITH YOUR DEVICE</p><h2 id="finder-heading">Find your repair.</h2><p>Select what needs attention. We’ll confirm the model, price and timing with you.</p></div>
+  <form action="{{ url_for('book') }}" method="get" class="finder-form" data-repair-finder>
+    <div class="field-group"><label for="finder-device">Your device</label><select id="finder-device" name="device_type" required>{% for device in device_types %}<option value="{{ device }}">{{ device }}</option>{% endfor %}</select></div>
+    <div class="field-group"><label for="finder-service">What needs fixing?</label><select id="finder-service" name="service_needed" required>{% for service in repair_services %}<option value="{{ service }}">{{ service }}</option>{% endfor %}</select></div>
+    <button class="button button-primary" type="submit">Continue to booking →</button>
+  </form>
+</section>

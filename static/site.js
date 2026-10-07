@@ -52,3 +52,21 @@ depthCards.forEach(card => {
   card.addEventListener('pointerleave', reset);
   depthPreference.addEventListener('change', reset);
 });
+
+// Progressive enhancement: the server-rendered finder also works without JS/API.
+const repairFinder = document.querySelector('[data-repair-finder]');
+if (repairFinder) {
+  fetch('/api/v1/repair-catalog', {credentials: 'omit'})
+    .then(response => { if (!response.ok) throw new Error('Catalog unavailable'); return response.json(); })
+    .then(catalog => {
+      for (const [name, choices] of [['device_type', catalog.devices], ['service_needed', catalog.services]]) {
+        if (!Array.isArray(choices) || !choices.length || !choices.every(value => typeof value === 'string')) continue;
+        const select = repairFinder.elements[name];
+        const selected = select.value;
+        // Do not replace a selection after a visitor has started using the form.
+        if (repairFinder.contains(document.activeElement)) continue;
+        select.replaceChildren(...choices.map(value => new Option(value, value)));
+        if (choices.includes(selected)) select.value = selected;
+      }
+    }).catch(() => { /* Keep usable server-rendered options if offline. */ });
+}

@@ -28,7 +28,7 @@
         <label for="device_type">Device Type</label>
         <select id="device_type" name="device_type" required>
           <option value="">Select Device Type</option>
-          {% for option in ["iPhone", "Samsung", "Android", "Tablet", "Other"] %}
+          {% for option in device_types %}
             <option value="{{ option }}" {% if form.get('device_type') == option %}selected{% endif %}>{{ option }}</option>
           {% endfor %}
         </select>
@@ -41,7 +41,7 @@
         <label for="service_needed">Service Needed</label>
         <select id="service_needed" name="service_needed" required>
           <option value="">Select Service Needed</option>
-          {% for option in ["Screen Repair", "Battery Replacement", "Charging Port Repair", "Camera Repair", "Speaker/Microphone Repair", "Water Damage Diagnostic", "General Diagnostic"] %}
+          {% for option in repair_services %}
             <option value="{{ option }}" {% if form.get('service_needed') == option %}selected{% endif %}>{{ option }}</option>
           {% endfor %}
         </select>

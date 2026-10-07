@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% block title %}Track your repair | Revive & Thrive Tech{% endblock %}
+{% block content %}
+<section class="section section-shell section-narrow">
+<p class="eyebrow">FROM CHECK-IN TO PICKUP</p><h1>Your repair. One clear update.</h1>
+<p>Enter the private tracking code from your booking confirmation. Older bookings may not have a code—contact us for an update.</p>
+<form method="post" class="form">
+<input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+<div class="field-group"><label for="tracking-code">Private tracking code</label><input id="tracking-code" name="tracking_code" maxlength="512" required autocomplete="off" autocapitalize="off" spellcheck="false"></div>
+<button class="button" type="submit">Check repair status</button>
+</form>
+{% if error %}<p class="alert" role="alert">{{ error }}</p>{% endif %}
+{% if repair %}<div class="tracking-code" role="status"><h2>{{ repair.status }}</h2><p>Repair reference: {{ repair.reference }}</p><p>For timing, parts or pickup questions, contact us with this reference.</p></div>{% endif %}
+<div class="form-actions"><a class="button button-secondary" href="tel:+13476715335">Call for an update</a><a class="text-link" href="/contact">Send a question →</a></div>
+</section>
+{% endblock %}

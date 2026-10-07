@@ -5,9 +5,10 @@
 {% block content %}
   <section class="section" data-reveal>
     <div class="card">
-      <h1>You are all set.</h1>
-      <p>Thanks for booking with Revive & Thrive Tech. Your request is now in line and our team will follow up quickly.</p>
+      <h1>Your request is received.</h1>
+      <p>Thanks for booking with Revive & Thrive Tech. We’ll follow up to confirm pricing, parts and appointment availability.</p>
       <p>We are committed to giving every customer a smooth, reliable service experience from check-in to pickup.</p>
+      {% if tracking_code %}<div class="tracking-code"><h2>Keep your private tracking code</h2><p>Save this code to check progress for 90 days. Anyone with it can view the repair status.</p><code>{{ tracking_code }}</code><a class="button" href="/track">Track your repair</a></div>{% endif %}
       <div class="form-actions">
         <a class="button button-primary" href="/">Return home</a>
         <a class="button button-secondary" href="/book">Book another repair</a>

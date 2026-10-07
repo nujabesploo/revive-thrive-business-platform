@@ -41,3 +41,19 @@ footer{border-top:1px solid var(--border);background:#071727}.footer-inner{displ
 .device-card .service-photo{height:auto;aspect-ratio:1440/966;flex:none;object-fit:contain;border:0;border-radius:12px;margin:0 0 20px}
 .device-grid{gap:20px}
 .device-card{padding:18px}
+
+/* Customer flow: consistent dark surfaces, relaxed typography and clear actions. */
+html{background:#071422}
+body{background:radial-gradient(ellipse at 5% 0%,#173c50 0,transparent 45%),radial-gradient(ellipse at 100% 45%,#102d40 0,transparent 50%),#071422;font-size:16px}
+h1,h2,h3,h4{letter-spacing:-.02em;font-weight:650;line-height:1.18}
+p,li{line-height:1.7}
+.section-shell h2{font-size:clamp(24px,3vw,32px);margin-top:28px;margin-bottom:16px}
+.service-tile,.service-tile:hover{background:#10273a;color:#e3edf6;border-color:#345267}
+.skip-link{background:#9beaf0;color:#082237}
+.repair-finder{display:grid;grid-template-columns:1fr 1.4fr;gap:32px;align-items:center;margin:32px 0 48px;padding:28px;border:1px solid #36596e;border-radius:20px;background:linear-gradient(125deg,#14384b,#0c2133)}
+.repair-finder h2{font-size:clamp(26px,3vw,36px);margin:0 0 12px}.repair-finder p{margin:0}.repair-finder .eyebrow{margin-bottom:12px}
+.finder-form{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:0}.finder-form .button{grid-column:1/-1;cursor:pointer}.finder-form .field-group{margin:0;min-width:0}
+.btn,.button{display:inline-flex;align-items:center;justify-content:center;text-align:center;white-space:normal}
+@media(max-width:850px){.repair-finder{grid-template-columns:1fr;gap:24px;padding:24px}.finder-form{grid-template-columns:1fr}.finder-form .button{grid-column:auto}}
+.nav-link.nav-book{background:#9beaf0;color:#082237;border-color:#9beaf0;font-weight:650}
+.tracking-code{padding:24px;margin:24px 0;border:1px solid #45647a;border-radius:16px;background:#0b2235}.tracking-code code{display:block;overflow-wrap:anywhere;user-select:all;font-size:14px;color:#c6f5fc;margin:20px 0}
