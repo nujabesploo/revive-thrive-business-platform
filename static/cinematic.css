@@ -59,3 +59,5 @@ p,li{line-height:1.7}
 .tracking-code{padding:24px;margin:24px 0;border:1px solid #45647a;border-radius:16px;background:#0b2235}.tracking-code code{display:block;overflow-wrap:anywhere;user-select:all;font-size:14px;color:#c6f5fc;margin:20px 0}
 button[type="submit"]{background:#9beaf0;color:#082237;border:1px solid #a7f4f7;font:inherit;font-weight:650}
 button[type="submit"]:hover{background:#c7f8fb;color:#071c2b;border-color:#d3ffff}
+
+.opening-promo{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:12px;padding:18px 24px;margin:24px 0;border:1px solid #36596e;border-radius:14px;background:linear-gradient(110deg,#143d4b,#102438);font-size:15px}.opening-promo strong{color:#e9faff}.opening-promo a{font-weight:650;text-underline-offset:4px}
