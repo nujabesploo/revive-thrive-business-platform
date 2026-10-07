@@ -36,3 +36,8 @@ footer{border-top:1px solid var(--border);background:#071727}.footer-inner{displ
 @media(max-width:850px){.story-hero,.owner-story,.bench-feature,.brand-story,.brand-finale{grid-template-columns:1fr}.story-hero{gap:32px}.owner-portrait{width:100%;max-width:400px;justify-self:center}.home-section{padding-block:40px}.brand-story figure{order:2}.repair-process{gap:24px}.brand-text{font-size:clamp(16px,4vw,22px)}.hero-actions{flex-wrap:wrap;gap:18px}.service-tiles{grid-template-columns:repeat(2,minmax(0,1fr))}.section-heading{align-items:start}}
 @media(max-width:500px){.service-tiles{grid-template-columns:1fr}.service-tile{padding:24px}.story-hero h1{font-size:clamp(36px,9vw,46px)}.real-hero-media{max-width:280px}.real-hero-media video{max-height:470px}.repair-process{grid-template-columns:1fr}.site-header{padding-inline:0}.site-nav .nav-link{font-size:13px;padding:10px 8px}.owner-story p,.bench-feature p,.brand-story p,.brand-finale p{font-size:16px}.section-shell{padding:24px 18px}.hero-actions .btn{width:100%}}
 #repair-work,#cinematic-film,.device-card[id]{scroll-margin-top:130px}
+
+/* Keep catalog photos at their intrinsic ratio instead of the HTML fallback height. */
+.device-card .service-photo{height:auto;aspect-ratio:1440/966;flex:none;object-fit:contain;border:0;border-radius:12px;margin:0 0 20px}
+.device-grid{gap:20px}
+.device-card{padding:18px}
