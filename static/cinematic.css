@@ -61,3 +61,14 @@ button[type="submit"]{background:#9beaf0;color:#082237;border:1px solid #a7f4f7;
 button[type="submit"]:hover{background:#c7f8fb;color:#071c2b;border-color:#d3ffff}
 
 .opening-promo{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:12px;padding:18px 24px;margin:24px 0;border:1px solid #36596e;border-radius:14px;background:linear-gradient(110deg,#143d4b,#102438);font-size:15px}.opening-promo strong{color:#e9faff}.opening-promo a{font-weight:650;text-underline-offset:4px}
+
+/* Device-led repair showcase: content stays readable at every width. */
+.device-showcase{position:relative;isolation:isolate;overflow:hidden;border:1px solid #28495d;border-radius:24px;background:#061422;min-height:420px;display:grid;align-items:center}
+.device-showcase>img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:-2}
+.device-showcase:before{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(3,15,26,.98),rgba(3,15,26,.88) 37%,transparent 72%);z-index:-1}
+.device-showcase-copy{max-width:540px;padding:clamp(24px,4vw,52px)}
+.device-showcase-copy h2{font-size:clamp(28px,3.4vw,46px);line-height:1.12}
+.device-showcase-copy p{color:#d2e2eb}.device-showcase-copy .eyebrow{color:#65e5da}
+.device-showcase .hero-actions{display:flex;flex-wrap:wrap;gap:12px}.device-showcase .btn{white-space:normal}
+.device-showcase-copy .device-showcase-note{font-size:13px;line-height:1.6;margin-top:20px}
+@media(max-width:700px){.device-showcase{display:flex;flex-direction:column;min-height:0}.device-showcase>img{position:static;aspect-ratio:1344/752;height:auto;z-index:auto}.device-showcase:before{display:none}.device-showcase-copy{max-width:none;padding:24px}.device-showcase .hero-actions{flex-direction:column}.device-showcase .btn{text-align:center}}
