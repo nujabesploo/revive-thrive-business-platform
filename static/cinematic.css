@@ -72,3 +72,17 @@ button[type="submit"]:hover{background:#c7f8fb;color:#071c2b;border-color:#d3fff
 .device-showcase .hero-actions{display:flex;flex-wrap:wrap;gap:12px}.device-showcase .btn{white-space:normal}
 .device-showcase-copy .device-showcase-note{font-size:13px;line-height:1.6;margin-top:20px}
 @media(max-width:700px){.device-showcase{display:flex;flex-direction:column;min-height:0}.device-showcase>img{position:static;aspect-ratio:1344/752;height:auto;z-index:auto}.device-showcase:before{display:none}.device-showcase-copy{max-width:none;padding:24px}.device-showcase .hero-actions{flex-direction:column}.device-showcase .btn{text-align:center}}
+
+.ambient-controls{display:flex;align-items:center;flex-wrap:wrap;gap:12px;margin:20px 0}.ambient-controls span{font-size:13px;color:#bacfdc}
+
+/* Remove legacy light section fills; keep a single readable navy palette. */
+.home-section{background:transparent;color:var(--text);box-shadow:none;text-align:left}
+#repair-prices{background:linear-gradient(145deg,#122c40,#0b1d2e);padding:clamp(22px,4vw,48px);border:1px solid var(--border);border-radius:20px;margin:32px 0}
+#repair-prices h2{font-size:clamp(28px,3.5vw,42px);color:#f1f8ff;line-height:1.2}
+#repair-prices .price-guide-note{color:#c6d6e3;max-width:70ch;margin:18px 0 24px}
+.table caption{padding:18px;text-align:left;background:#0e2235}
+.section-shell,.home-section,.repair-catalog{min-width:0}
+.section-shell>h1,.section-shell>h2,.section-shell>p,.section-shell .field-group{text-align:left}
+.home-section h2,.section-shell h1,.section-shell h2{letter-spacing:-.025em;text-wrap:pretty}
+.home-section>p{margin-bottom:20px}.home-section>p:last-child{margin-bottom:0}
+.device-showcase{background:#061422}.device-card>h2,.device-card>p,.device-card>ul{margin-left:0;margin-right:0}

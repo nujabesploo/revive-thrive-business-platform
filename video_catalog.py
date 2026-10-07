@@ -10,17 +10,17 @@ PROMO_VIDEOS = [
     {
         "title": "Explore your repair options",
         "description": "Start with your device and discuss the next step.",
-        "src": "motion/ugc-oct7/repair-options.mp4",
-        "poster": "motion/ugc-oct7/repair-options.jpg",
-        "captions": "motion/ugc-oct7/repair-options.vtt",
+        "src": "motion/ugc-oct7/nigerian-repair.mp4",
+        "poster": "motion/ugc-oct7/nigerian-repair.jpg",
+        "captions": "motion/ugc-oct7/nigerian-repair.vtt",
         "label": "Brand film",
     },
     {
         "title": "Meet Revive & Thrive Tech in DeSoto",
         "description": "Opening October 20 at Grow DeSoto Market Place, booth 701.",
-        "src": "motion/ugc-oct7/desoto-opening-reviewed.mp4",
-        "poster": "motion/ugc-oct7/desoto-opening.jpg",
-        "captions": "motion/ugc-oct7/desoto-opening.vtt",
+        "src": "motion/ugc-oct7/nigerian-opening.mp4",
+        "poster": "motion/ugc-oct7/nigerian-opening.jpg",
+        "captions": "motion/ugc-oct7/nigerian-opening.vtt",
         "label": "Brand film",
     }
 ]

@@ -70,3 +70,21 @@ if (repairFinder) {
       }
     }).catch(() => { /* Keep usable server-rendered options if offline. */ });
 }
+
+// Music is opt-in and pauses whenever a customer starts a video.
+(() => {
+ const audio = document.getElementById('ambient-music');
+ const button = document.getElementById('ambient-toggle');
+ const status = document.getElementById('ambient-status');
+ if (!audio || !button || !status) return;
+ audio.volume = 0.18;
+ const sync = () => {button.textContent = audio.paused ? 'Play background music' : 'Pause background music'; button.setAttribute('aria-pressed', String(!audio.paused)); status.textContent = audio.paused ? 'Optional lo-fi music · off' : 'Optional lo-fi music · on';};
+ button.addEventListener('click', async () => {
+   if (!audio.paused) {audio.pause(); return;}
+   if ([...document.querySelectorAll('video')].some(v => !v.paused)) {status.textContent = 'Pause the video before starting background music.'; return;}
+   try {await audio.play();} catch (_) {status.textContent = 'Music could not load. Please try again.';}
+ });
+ audio.addEventListener('play', sync); audio.addEventListener('pause', sync);
+ document.querySelectorAll('video').forEach(v => v.addEventListener('play', () => audio.pause()));
+ document.addEventListener('visibilitychange', () => {if(document.hidden) audio.pause();});
+})();
