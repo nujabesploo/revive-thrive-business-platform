@@ -57,3 +57,5 @@ p,li{line-height:1.7}
 @media(max-width:850px){.repair-finder{grid-template-columns:1fr;gap:24px;padding:24px}.finder-form{grid-template-columns:1fr}.finder-form .button{grid-column:auto}}
 .nav-link.nav-book{background:#9beaf0;color:#082237;border-color:#9beaf0;font-weight:650}
 .tracking-code{padding:24px;margin:24px 0;border:1px solid #45647a;border-radius:16px;background:#0b2235}.tracking-code code{display:block;overflow-wrap:anywhere;user-select:all;font-size:14px;color:#c6f5fc;margin:20px 0}
+button[type="submit"]{background:#9beaf0;color:#082237;border:1px solid #a7f4f7;font:inherit;font-weight:650}
+button[type="submit"]:hover{background:#c7f8fb;color:#071c2b;border-color:#d3ffff}
