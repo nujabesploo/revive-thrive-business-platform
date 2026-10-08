@@ -1,0 +1,8 @@
+[Unit]
+Description=Retry repair notifications every minute
+[Timer]
+OnBootSec=30s
+OnUnitInactiveSec=60s
+Unit=revive-notifications.service
+[Install]
+WantedBy=timers.target

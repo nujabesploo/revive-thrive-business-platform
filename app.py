@@ -13,6 +13,7 @@ from database import get_db_connection, init_db, init_db_app
 from media import init_media_app, media_url
 from transactions import register_transactions
 from video_catalog import REPAIR_VIDEOS, PROMO_VIDEOS
+from notifications import initialize as init_notifications, enqueue
 from repair_catalog import DEVICE_TYPES, REPAIR_SERVICES
 from repair_tracking import issue_tracking_code, lookup_tracking_code
 
@@ -63,6 +64,7 @@ def verify_csrf():
 
 with app.app_context():
     init_db()
+    init_notifications()
 
 
 @app.context_processor
@@ -97,7 +99,7 @@ def _safe_next_path(target):
 def send_email(to_email, subject, body):
     if not MAIL_USERNAME or not MAIL_PASSWORD:
         print("Email credentials missing.")
-        return
+        return False
 
     msg = EmailMessage()
     msg["From"] = MAIL_USERNAME
@@ -110,8 +112,10 @@ def send_email(to_email, subject, body):
             smtp.login(MAIL_USERNAME, MAIL_PASSWORD)
             smtp.send_message(msg)
         print("Email sent.")
+        return True
     except Exception as e:
         app.logger.error("Email delivery failed: %s", type(e).__name__)
+        return False
 
 
 def send_telegram(message):
@@ -128,7 +132,7 @@ def send_telegram(message):
         response.raise_for_status()
         payload = response.json()
         if not payload.get("ok"):
-            print(f"Telegram API returned error: {payload}")
+            print("Telegram API did not confirm delivery.")
             return False
         print("Telegram sent.")
         return True
@@ -198,6 +202,9 @@ def book():
             ]
         }
 
+        if any(len(v) > 4000 for v in form_data.values()) or len(form_data["email"]) > 254 or not re.fullmatch(r"[^\s@]+@[^\s@]+\.[^\s@]+", form_data["email"]):
+            abort(400, "Check your email address and keep field values under 4,000 characters.")
+
         if not all(form_data.values()):
             flash("Please complete every field before submitting your booking.", "error")
             return render_template("book.html", form=form_data)
@@ -228,6 +235,7 @@ def book():
             """
             INSERT INTO bookings (
                 customer_name,
+                email,
                 phone_number,
                 phone_number_normalized,
                 device_type,
@@ -237,10 +245,11 @@ def book():
                 preferred_date,
                 created_at
             )
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             """,
             (
                 form_data["customer_name"],
+                form_data["email"],
                 form_data["phone_number"],
                 normalized_phone,
                 form_data["device_type"],
@@ -264,9 +273,6 @@ def book():
             )
         except Exception:
             pass
-
-        conn.commit()
-        conn.close()
 
         tracking_code = issue_tracking_code(ticket_id)
         session["tracking_code"] = tracking_code
@@ -309,36 +315,12 @@ def book():
     - Revive & Thrive Tech
     """
 
-        # Notify business via Telegram and email
-        try:
-            if not send_telegram(business_message):
-                print("Business telegram notify did not confirm delivery.")
-        except Exception as e:
-            print(f"Business telegram notify failed: {e}")
-
-        try:
-            if BUSINESS_EMAIL:
-                send_email(
-                    BUSINESS_EMAIL,
-                    "New Repair Booking - Revive & Thrive Tech",
-                    business_message,
-                )
-        except Exception as e:
-            print(f"Business email notify failed: {e}")
-
-        # Notify customer (email)
-        try:
-            customer_email = form_data.get("email") or request.form.get("email")
-            if customer_email:
-                send_email(
-                    customer_email,
-                    "Your Revive & Thrive Tech Booking Confirmation",
-                    customer_message,
-                )
-        except Exception as e:
-            print(f"Customer email notify failed: {e}")
-
-        # (No SMS here — using email and Telegram notifications)
+        # Save alerts atomically with the booking; provider failures cannot lose them.
+        enqueue(conn, 'telegram', '', 'New repair request', business_message[:3900])
+        enqueue(conn, 'email', BUSINESS_EMAIL, 'New Repair Booking - Revive & Thrive Tech', business_message)
+        enqueue(conn, 'email', form_data['email'], 'Your Revive & Thrive Tech Repair Request', customer_message)
+        conn.commit()
+        conn.close()
 
         flash("Repair request saved. Keep the private tracking code shown below.", "success")
         return redirect(url_for("success"))
@@ -457,22 +439,44 @@ def contact():
         email = request.form.get('email', '').strip()
         message = request.form.get('message', '').strip()
 
+        if len(name) > 200 or len(email) > 254 or len(message) > 4000 or not re.fullmatch(r'[^\s@]+@[^\s@]+\.[^\s@]+', email):
+            abort(400, 'Check your email address and keep your message under 4,000 characters.')
+
         if not (name and email and message):
             flash('Please complete all fields before sending your message.', 'error')
             return render_template('contact.html', form={'name':name, 'email':email, 'message':message})
 
         body = f"Contact form submission\n\nName: {name}\nEmail: {email}\n\nMessage:\n{message}"
 
-        try:
-            if BUSINESS_EMAIL:
-                send_email(BUSINESS_EMAIL, f'Contact form: {name}', body)
-            flash('Your message has been sent. We will be in touch shortly.', 'success')
-            return redirect(url_for('success'))
-        except Exception as e:
-            print('Contact email failed:', e)
-            flash('Failed to send message. Please try again later.', 'error')
+        import time, uuid
+        conn = get_db_connection()
+        conn.cursor().execute('INSERT INTO contact_messages (id,name,email,message,created_at) VALUES (?,?,?,?,?)',
+                     (uuid.uuid4().hex,name,email,message,time.time()))
+        enqueue(conn, 'email', BUSINESS_EMAIL, 'New website message', body)
+        enqueue(conn, 'telegram', '', 'New website message', body[:3900])
+        conn.commit()
+        flash('Your message has been saved. We will be in touch shortly.', 'success')
+        return redirect(url_for('contact'))
 
     return render_template('contact.html', form={})
+
+
+@app.route('/admin/notifications')
+@admin_required
+def notification_status():
+    conn=get_db_connection()
+    pending=conn.cursor().execute('SELECT COUNT(*) FROM notification_outbox WHERE delivered_at IS NULL').fetchone()[0]
+    failed=conn.cursor().execute('SELECT COUNT(*) FROM notification_outbox WHERE delivered_at IS NULL AND attempts > 0').fetchone()[0]
+    messages=conn.cursor().execute('SELECT * FROM contact_messages ORDER BY created_at DESC LIMIT 100').fetchall()
+    return render_template('notifications.html',pending=pending,failed=failed,messages=messages)
+
+
+@app.route('/api/v1/notification-health')
+@admin_required
+def notification_health():
+    conn=get_db_connection()
+    count=conn.cursor().execute('SELECT COUNT(*) FROM notification_outbox WHERE delivered_at IS NULL').fetchone()[0]
+    return jsonify(pending=count,telegram_configured=bool(TELEGRAM_BOT_TOKEN and TELEGRAM_CHAT_ID),email_configured=bool(MAIL_USERNAME and MAIL_PASSWORD))
 
 
 @app.route("/ticket/<int:id>", methods=["GET", "POST"])

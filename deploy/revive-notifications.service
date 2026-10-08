@@ -1,0 +1,10 @@
+[Unit]
+Description=Deliver persisted repair and contact notifications
+After=network-online.target revive-thrive.service
+[Service]
+Type=oneshot
+User=ubuntu
+WorkingDirectory=/home/ubuntu/projects/revive-thrive-business-platform
+ExecStart=/home/ubuntu/projects/revive-thrive-business-platform/venv/bin/python scripts/deliver_notifications.py
+TimeoutStartSec=15min
+UMask=0077
